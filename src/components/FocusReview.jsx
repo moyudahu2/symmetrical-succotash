@@ -9,6 +9,7 @@ import {
 import { playSuccess, playFail, playFlip, playStarOn, playStarOff } from '../utils/audio'
 import useTTS from '../hooks/useTTS'
 import BackButton from './BackButton'
+import { LOADING, CORRECT, WRONG, DONE, pick } from '../utils/humorConstants'
 
 const FILTERS = [
   { key: 'all', label: '全部重点词', icon: AlertTriangle },
@@ -29,11 +30,16 @@ export default function FocusReview() {
   const [starred, setStarred] = useState(new Set())
   const [starAnimId, setStarAnimId] = useState(null)
   const [isDone, setIsDone] = useState(false)
+  const [humorMsg, setHumorMsg] = useState(null)
+  const [loadingCopy, setLoadingCopy] = useState('加载中...')
   const { speaking, autoplayBlocked, toggle: speakWord, speak, preload } = useTTS()
 
   useEffect(() => {
     loadWords()
     loadStarredState()
+    setLoadingCopy(pick(LOADING))
+    const interval = setInterval(() => setLoadingCopy(pick(LOADING)), 3000)
+    return () => clearInterval(interval)
   }, [filter])
 
   useEffect(() => {
@@ -101,8 +107,9 @@ export default function FocusReview() {
     setAnimating(true)
     setFlash(isKnown ? 'known' : 'unknown')
     setFeedbackClass(isKnown ? 'bounce-correct' : 'shake-wrong')
-    if (isKnown) playSuccess()
-    else playFail()
+    if (isKnown) { playSuccess(); setHumorMsg(pick(CORRECT)) }
+    else { playFail(); setHumorMsg(pick(WRONG)) }
+    setTimeout(() => setHumorMsg(null), 1800)
 
     const prevProgress = getWordProgress(currentWord.id)
     const newSrs = calculateSrs(prevProgress, isKnown)
@@ -158,7 +165,7 @@ export default function FocusReview() {
         <div className="flex items-center justify-center py-20">
           <div className="flex flex-col items-center gap-3">
             <div className="w-8 h-8 border-3 border-primary-200 border-t-primary-500 rounded-full animate-spin" />
-            <span className="text-surface-400 text-sm animate-pulse">加载中...</span>
+            <span className="text-surface-400 text-sm animate-pulse italic">{loadingCopy}</span>
           </div>
         </div>
       )
@@ -171,7 +178,7 @@ export default function FocusReview() {
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5">
               <Check className="w-8 h-8 text-green-500" />
             </div>
-            <h2 className="text-2xl font-bold text-surface-800 mb-2 font-display">重点词复习完成！</h2>
+            <h2 className="text-2xl font-bold text-surface-800 mb-2 font-display">{pick(DONE)}</h2>
             <p className="text-surface-400 mb-6">共复习了 {words.length} 个重点词</p>
             {reviewBack}
           </div>
@@ -257,6 +264,13 @@ export default function FocusReview() {
               </div>
             </div>
           </div>
+
+          {/* Humor feedback */}
+          {humorMsg && (
+            <div className="flex items-center justify-center gap-2 mb-4 animate-[fade-down_0.3s_ease-out]">
+              <span className="text-sm text-primary-500 font-medium italic">{humorMsg}</span>
+            </div>
+          )}
 
           {/* Buttons */}
           <div className="flex gap-3 sm:gap-4">

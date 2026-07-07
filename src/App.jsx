@@ -6,13 +6,14 @@ import Flashcard from './components/Flashcard'
 import Quiz from './components/Quiz'
 import Dashboard from './components/Dashboard'
 import FocusReview from './components/FocusReview'
+import { LOADING as LOADING_COPY, pick } from './utils/humorConstants'
 
 const WordList = lazy(() => import('./components/WordList'))
 
 const LOADING = (
   <div className="flex flex-col items-center justify-center py-20 gap-3 min-h-dvh bg-surface-50">
     <div className="w-8 h-8 border-3 border-primary-200 border-t-primary-500 rounded-full animate-spin" />
-    <span className="text-surface-400 text-sm animate-pulse">加载中...</span>
+    <span className="text-surface-400 text-sm animate-pulse italic">{pick(LOADING_COPY)}</span>
   </div>
 )
 

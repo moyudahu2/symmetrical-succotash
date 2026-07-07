@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Check, X, RotateCcw, Volume2, Star, ArrowRight } from 'lucide-react'
+import { Check, X, RotateCcw, Volume2, Star, ArrowRight, MessageCircle } from 'lucide-react'
 import wordsData from '../data/words'
 import { calculateSrs, saveWordProgress, getWordProgress, getDueWords, getDefaultSrs, loadAllProgress, isStarred, toggleStarred } from '../utils/srs'
 import { playSuccess, playFail, playFlip, playStarOn, playStarOff } from '../utils/audio'
 import useTTS from '../hooks/useTTS'
 import { getTodayQueue, markWordStudied, getTodayProgress, loadPlan } from '../utils/studyPlan'
 import BackButton from './BackButton'
+import { LOADING, CORRECT, WRONG, DONE, LOADING_WORDS, pick } from '../utils/humorConstants'
 
 const MAX_LOAD_RETRIES = 3
 
@@ -21,6 +22,8 @@ export default function Flashcard() {
   const [starred, setStarred] = useState(false)
   const [starAnim, setStarAnim] = useState(false)
   const [loadingError, setLoadingError] = useState(null)
+  const [humorMsg, setHumorMsg] = useState(null)
+  const [loadingCopy, setLoadingCopy] = useState(LOADING_WORDS)
   const navigate = useNavigate()
   const containerRef = useRef(null)
   const loadAttempt = useRef(0)
@@ -62,7 +65,9 @@ export default function Flashcard() {
     }
 
     loadQueue()
-    return () => { cancelled = true }
+    setLoadingCopy(pick(LOADING))
+    const loadingInterval = setInterval(() => setLoadingCopy(pick(LOADING)), 3000)
+    return () => { cancelled = true; clearInterval(loadingInterval) }
   }, [])
 
   const currentWord = dueWords[currentIndex]
@@ -76,8 +81,9 @@ export default function Flashcard() {
     setAnimating(true)
     setFlash(isKnown ? 'known' : 'unknown')
     setFeedbackClass(isKnown ? 'bounce-correct' : 'shake-wrong')
-    if (isKnown) playSuccess()
-    else playFail()
+    if (isKnown) { playSuccess(); setHumorMsg(pick(CORRECT)) }
+    else { playFail(); setHumorMsg(pick(WRONG)) }
+    setTimeout(() => setHumorMsg(null), 1800)
 
     const prevProgress = getWordProgress(currentWord.id)
     const newSrs = calculateSrs(prevProgress, isKnown)
@@ -149,7 +155,7 @@ export default function Flashcard() {
             </div>
           </div>
           <h2 className="text-2xl font-bold text-surface-800 mb-2 font-display">
-            {planAdjusted ? '暂无更多任务' : '今日任务完成！'}
+            {planAdjusted ? '暂无更多任务' : pick(DONE)}
           </h2>
           <p className="text-surface-400 mb-6">
             {planAdjusted
@@ -187,7 +193,7 @@ export default function Flashcard() {
       <div className="flex items-center justify-center py-20">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border-3 border-primary-200 border-t-primary-500 rounded-full animate-spin" />
-          <span className="text-surface-400 text-sm animate-pulse">加载中...</span>
+          <span className="text-surface-400 text-sm animate-pulse italic">{loadingCopy}</span>
         </div>
       </div>
     )
@@ -301,6 +307,14 @@ export default function Flashcard() {
             </div>
           </div>
         </div>
+
+        {/* Humor feedback */}
+        {humorMsg && (
+          <div className="flex items-center justify-center gap-2 mb-4 animate-[fade-down_0.3s_ease-out]">
+            <MessageCircle className="w-4 h-4 text-primary-400 shrink-0" />
+            <span className="text-sm text-primary-500 font-medium italic">{humorMsg}</span>
+          </div>
+        )}
 
         {/* Action buttons */}
         <div className="flex gap-3 sm:gap-4">

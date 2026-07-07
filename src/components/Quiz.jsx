@@ -5,6 +5,7 @@ import { Check, X, ArrowRight, RotateCcw, Volume2, BarChart3, BookOpen } from 'l
 import { playClick, playSuccess, playFail } from '../utils/audio'
 import useTTS from '../hooks/useTTS'
 import BackButton from './BackButton'
+import { CORRECT, WRONG, DONE, LOADING, pick } from '../utils/humorConstants'
 
 const defGroups = wordsData.reduce((acc, w) => {
   if (!acc[w.definition]) acc[w.definition] = []
@@ -32,6 +33,7 @@ export default function Quiz() {
   const [isFinished, setIsFinished] = useState(false)
   const [animOption, setAnimOption] = useState(null)
   const [autoAdvancing, setAutoAdvancing] = useState(false)
+  const [humorMsg, setHumorMsg] = useState(null)
   const optionRefs = useRef([])
   const autoAdvanceTimer = useRef(null)
 
@@ -85,6 +87,8 @@ export default function Quiz() {
 
     if (isCorrect) {
       setTimeout(() => playSuccess(), 80)
+      setHumorMsg(pick(CORRECT))
+      setTimeout(() => setHumorMsg(null), 1800)
       setAutoAdvancing(true)
       autoAdvanceTimer.current = setTimeout(() => {
         autoAdvanceTimer.current = null
@@ -100,6 +104,8 @@ export default function Quiz() {
       }, 900)
     } else {
       setTimeout(() => playFail(), 80)
+      setHumorMsg(pick(WRONG))
+      setTimeout(() => setHumorMsg(null), 2500)
     }
 
     setScore(prev => ({
@@ -153,7 +159,7 @@ export default function Quiz() {
           <div className="w-20 h-20 mx-auto mb-5 bg-gradient-to-br from-primary-50 to-primary-100 rounded-full flex items-center justify-center text-4xl shadow-inner">
             {grade.emoji}
           </div>
-          <h2 className="text-2xl font-bold text-surface-800 mb-2 font-display">测验完成！</h2>
+          <h2 className="text-2xl font-bold text-surface-800 mb-2 font-display">{pick(DONE)}</h2>
           <div className="relative my-6">
             <div className="w-28 h-28 mx-auto rounded-full bg-surface-50 flex items-center justify-center border-4 border-surface-100">
               <span className="text-4xl font-bold text-gradient">{pct}%</span>
@@ -299,6 +305,13 @@ export default function Quiz() {
             )
           })}
         </div>
+
+        {/* Humor feedback */}
+        {humorMsg && (
+          <div className="flex items-center justify-center gap-2 mt-5 mb-2 animate-[fade-down_0.3s_ease-out]">
+            <span className="text-sm text-primary-500 font-medium italic">{humorMsg}</span>
+          </div>
+        )}
 
         {/* Error explanation card */}
         {showResult && selected !== current.correctAnswer && current.example && (
