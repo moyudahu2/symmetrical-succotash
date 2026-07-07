@@ -76,6 +76,7 @@ export default function Quiz() {
     if (showResult) return
     if (autoAdvanceTimer.current) clearTimeout(autoAdvanceTimer.current)
     playClick()
+    speak(current.word, { immediate: true })
     setSelected(option)
     setShowResult(true)
 
@@ -120,10 +121,19 @@ export default function Quiz() {
     }
   }, [currentIndex, questions.length])
 
-  const { speaking, autoplayBlocked, toggle: speakWord, speak } = useTTS()
+  const { speaking, autoplayBlocked, toggle: speakWord, speak, preload } = useTTS()
 
   useEffect(() => {
-    if (current) speak(current.word, { isAutoplay: true })
+    if (current) {
+      speak(current.word, { isAutoplay: true })
+      // Preload next word
+      const nextIdx = currentIndex + 1
+      if (nextIdx < questions.length) {
+        const nextWord = questions[nextIdx].word
+        setTimeout(() => preload(), 200)
+        setTimeout(() => preload(), 800)
+      }
+    }
   }, [current?.word])
 
   const restart = useCallback(() => {

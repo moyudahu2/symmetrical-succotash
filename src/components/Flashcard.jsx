@@ -98,10 +98,19 @@ export default function Flashcard() {
   }, [currentWord, currentIndex, dueWords.length, animating])
 
 
-  const { speaking, autoplayBlocked, toggle: speakWord, speak } = useTTS()
+  const { speaking, autoplayBlocked, toggle: speakWord, speak, preload } = useTTS()
 
   useEffect(() => {
-    if (currentWord) speak(currentWord.word, { isAutoplay: true })
+    if (currentWord) {
+      speak(currentWord.word, { isAutoplay: true })
+      // Preload next 2 words
+      const nextIds = [currentIndex + 1, currentIndex + 2]
+      nextIds.forEach(idx => {
+        if (idx < dueWords.length) {
+          setTimeout(() => preload(), 200 + (idx - currentIndex) * 150)
+        }
+      })
+    }
   }, [currentWord?.id])
 
   if (loadingError) {

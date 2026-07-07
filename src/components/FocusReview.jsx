@@ -29,7 +29,7 @@ export default function FocusReview() {
   const [starred, setStarred] = useState(new Set())
   const [starAnimId, setStarAnimId] = useState(null)
   const [isDone, setIsDone] = useState(false)
-  const { speaking, autoplayBlocked, toggle: speakWord, speak } = useTTS()
+  const { speaking, autoplayBlocked, toggle: speakWord, speak, preload } = useTTS()
 
   useEffect(() => {
     loadWords()
@@ -37,7 +37,15 @@ export default function FocusReview() {
   }, [filter])
 
   useEffect(() => {
-    if (currentWord) speak(currentWord.word, { isAutoplay: true })
+    if (currentWord) {
+      speak(currentWord.word, { isAutoplay: true })
+      const nextIds = [currentIndex + 1, currentIndex + 2]
+      nextIds.forEach(idx => {
+        if (idx < words.length) {
+          setTimeout(() => preload(), 200 + (idx - currentIndex) * 150)
+        }
+      })
+    }
   }, [currentWord?.id])
 
   function loadWords() {
