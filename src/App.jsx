@@ -18,7 +18,7 @@ const LOADING = (
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/symmetrical-succotash">
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/study" element={<HubPage />} />
