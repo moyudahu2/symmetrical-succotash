@@ -7,7 +7,9 @@ import Quiz from './components/Quiz'
 import Dashboard from './components/Dashboard'
 import FocusReview from './components/FocusReview'
 import { FishProvider } from './utils/FishContext'
+import { SkinProvider } from './utils/SkinContext'
 import FishToast from './components/FishToast'
+import SkinStore from './components/SkinStore'
 import { LOADING as LOADING_COPY, pick } from './utils/humorConstants'
 
 const WordList = lazy(() => import('./components/WordList'))
@@ -23,16 +25,19 @@ export default function App() {
   return (
     <BrowserRouter basename="/symmetrical-succotash">
       <FishProvider>
-        <FishToast />
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/study" element={<HubPage />} />
-          <Route path="/study/learn" element={<Page><Flashcard /></Page>} />
-          <Route path="/study/quiz" element={<Page><Quiz /></Page>} />
-          <Route path="/study/focus" element={<Page><FocusReview /></Page>} />
-          <Route path="/study/wordlist" element={<Page><WordList /></Page>} />
-          <Route path="/study/dashboard" element={<Page><Dashboard /></Page>} />
-        </Routes>
+        <SkinProvider>
+          <FishToast />
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/study" element={<HubPage />} />
+            <Route path="/study/learn" element={<Page><Flashcard /></Page>} />
+            <Route path="/study/quiz" element={<Page><Quiz /></Page>} />
+            <Route path="/study/focus" element={<Page><FocusReview /></Page>} />
+            <Route path="/study/wordlist" element={<Page><WordList /></Page>} />
+            <Route path="/study/dashboard" element={<Page><Dashboard /></Page>} />
+            <Route path="/study/store" element={<Page><SkinStore /></Page>} />
+          </Routes>
+        </SkinProvider>
       </FishProvider>
     </BrowserRouter>
   )

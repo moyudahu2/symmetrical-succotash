@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   BookOpen, Brain, AlertTriangle, Library, LayoutDashboard,
-  Sparkles, ArrowRight, Zap
+  Sparkles, ArrowRight, Zap, ShoppingBag, Fish
 } from 'lucide-react'
 import wordsData from '../data/words'
 import { calculateStreak, getMasteredCount, getFocusWordCount, getDueWords, loadAllProgress } from '../utils/srs'
 import { playHubEnter } from '../utils/audio'
+import { useFish } from '../utils/FishContext'
 
 const MODULES = [
   {
@@ -67,6 +68,7 @@ const cardVar = {
 
 export default function HubPage() {
   const navigate = useNavigate()
+  const { count } = useFish()
   const [mastered, setMastered] = useState(0)
   const [streak, setStreak] = useState(0)
   const [stats, setStats] = useState({ focusCount: 0, dueCount: 0 })
@@ -105,12 +107,25 @@ export default function HubPage() {
           </div>
           <span className="text-sm font-bold text-surface-800 font-display tracking-tight">幺家学英语</span>
         </div>
-        <button
-          onClick={() => navigate('/')}
-          className="text-xs text-surface-400 hover:text-surface-600 px-3.5 py-2 min-h-[36px] rounded-lg hover:bg-surface-100/60 transition-all duration-200"
-        >
-          退出
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => navigate('/study/store')}
+            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-primary-50 text-primary-600 hover:bg-primary-100 min-h-[36px] transition-all duration-200 font-medium"
+          >
+            <ShoppingBag className="w-3.5 h-3.5" />
+            <span>商店</span>
+          </button>
+          <div className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-amber-50 text-amber-600 text-xs font-medium min-h-[36px]">
+            <Fish className="w-3.5 h-3.5" />
+            <span>{count}</span>
+          </div>
+          <button
+            onClick={() => navigate('/')}
+            className="text-xs text-surface-400 hover:text-surface-600 px-3.5 py-2 min-h-[36px] rounded-lg hover:bg-surface-100/60 transition-all duration-200"
+          >
+            退出
+          </button>
+        </div>
       </header>
 
       {/* Greeting & stats */}
