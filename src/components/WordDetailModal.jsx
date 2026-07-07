@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Volume2, Star, BookOpen, Lightbulb, Bookmark } from 'lucide-react'
+import { X, Volume2, Star, BookOpen, Lightbulb, Bookmark, Newspaper, MessageCircle } from 'lucide-react'
 import useTTS from '../hooks/useTTS'
 import { isStarred, toggleStarred } from '../utils/srs'
 import { playStarOn, playStarOff } from '../utils/audio'
@@ -176,17 +176,53 @@ export default function WordDetailModal({ word, onClose }) {
               </div>
             </div>
 
-            {/* Example */}
-            {word.example ? (
-              <div className="bg-gradient-to-br from-primary-50/60 to-white rounded-xl border border-primary-100 p-4 mb-4">
-                <div className="flex items-center gap-2 mb-3">
+            {/* Examples */}
+            {word.examples && word.examples.length > 0 ? (
+              <div className="space-y-3 mb-4">
+                <div className="flex items-center gap-2 mb-1">
                   <BookOpen className="w-4 h-4 text-primary-500 shrink-0" />
                   <span className="text-xs font-semibold text-primary-600 uppercase tracking-wide">例句</span>
                 </div>
-                <p className="text-sm text-surface-700 leading-relaxed mb-2 italic">
-                  "{highlightKeyword(word.example, word.word)}"
-                </p>
-                <p className="text-xs text-surface-500 leading-relaxed">{word.exampleTranslation}</p>
+                {word.examples.map((ex, i) => {
+                  const toneColor = {
+                    formal: 'bg-blue-50 text-blue-600 border-blue-100',
+                    humorous: 'bg-amber-50 text-amber-600 border-amber-100',
+                    slang: 'bg-rose-50 text-rose-600 border-rose-100',
+                    neutral: 'bg-surface-100 text-surface-500 border-surface-200',
+                  }[ex.tone] || 'bg-surface-100 text-surface-500 border-surface-200'
+
+                  const toneLabel = { formal: '正式', humorous: '幽默', slang: '俚语', neutral: '中性' }[ex.tone] || ex.tone
+
+                  const scenarioIcon = {
+                    '学术考试': <BookOpen className="w-3.5 h-3.5" />,
+                    '新闻评论': <Newspaper className="w-3.5 h-3.5" />,
+                    '日常对话': <MessageCircle className="w-3.5 h-3.5" />,
+                  }[ex.scenario] || <BookOpen className="w-3.5 h-3.5" />
+
+                  const scenarioColor = {
+                    '学术考试': 'bg-primary-50 text-primary-600 border-primary-100',
+                    '新闻评论': 'bg-blue-50 text-blue-600 border-blue-100',
+                    '日常对话': 'bg-emerald-50 text-emerald-600 border-emerald-100',
+                  }[ex.scenario] || 'bg-surface-50 text-surface-500 border-surface-200'
+
+                  return (
+                    <div key={i} className="bg-gradient-to-br from-primary-50/40 to-white rounded-xl border border-primary-100/60 p-4">
+                      <div className="flex items-center gap-2 mb-2 flex-wrap">
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium border ${scenarioColor}`}>
+                          {scenarioIcon}
+                          {ex.scenario}
+                        </span>
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium border ${toneColor}`}>
+                          {toneLabel}
+                        </span>
+                      </div>
+                      <p className="text-sm text-surface-700 leading-relaxed mb-2 italic">
+                        "{highlightKeyword(ex.text, word.word)}"
+                      </p>
+                      <p className="text-xs text-surface-500 leading-relaxed">{ex.translation}</p>
+                    </div>
+                  )
+                })}
               </div>
             ) : (
               <div className="bg-surface-50 rounded-xl border border-surface-200 border-dashed p-4 mb-4">
@@ -194,7 +230,7 @@ export default function WordDetailModal({ word, onClose }) {
                   <BookOpen className="w-4 h-4 text-surface-300 shrink-0" />
                   <span className="text-xs font-semibold text-surface-400 uppercase tracking-wide">例句</span>
                 </div>
-                <p className="text-sm text-surface-400 italic">暂无例句，该单词的详细例句正在补充中...</p>
+                <p className="text-sm text-surface-400 italic">暂无例句，该单词的详细例句正在补充...</p>
               </div>
             )}
 
