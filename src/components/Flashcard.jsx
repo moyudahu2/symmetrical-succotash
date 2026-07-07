@@ -7,7 +7,8 @@ import { playSuccess, playFail, playFlip, playStarOn, playStarOff } from '../uti
 import useTTS from '../hooks/useTTS'
 import { getTodayQueue, markWordStudied, getTodayProgress, loadPlan } from '../utils/studyPlan'
 import BackButton from './BackButton'
-import { LOADING, CORRECT, WRONG, DONE, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, LOADING_WORDS, pick } from '../utils/humorConstants'
+import { LOADING, CORRECT, WRONG, DONE, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, LOADING_WORDS, EASTER_EGG_CONFIG, pick } from '../utils/humorConstants'
+import EasterEgg from './EasterEgg'
 
 const MAX_LOAD_RETRIES = 3
 
@@ -20,6 +21,10 @@ export default function Flashcard() {
   const [flash, setFlash] = useState(null)
   const [feedbackClass, setFeedbackClass] = useState('')
   const [confetti, setConfetti] = useState(false)
+  const [consecCorrect, setConsecCorrect] = useState(0)
+  const [showEgg, setShowEgg] = useState(false)
+  const sessionStart = useRef(Date.now())
+  const lastTimeCheck = useRef(Date.now())
   const [starred, setStarred] = useState(false)
   const [starAnim, setStarAnim] = useState(false)
   const [loadingError, setLoadingError] = useState(null)
@@ -84,8 +89,27 @@ export default function Flashcard() {
     setAnimating(true)
     setFlash(isKnown ? 'known' : 'unknown')
     setFeedbackClass(isKnown ? 'bounce-correct' : 'shake-wrong')
-    if (isKnown) { playSuccess(); setHumorMsg(pick(CORRECT)); setHumorEmoji(pick(EMOJI_CORRECT)); setConfetti(true); setTimeout(() => setConfetti(false), 1200) }
-    else { playFail(); setHumorMsg(pick(WRONG)); setHumorEmoji(pick(EMOJI_WRONG)) }
+    if (isKnown) {
+      playSuccess(); setHumorMsg(pick(CORRECT)); setHumorEmoji(pick(EMOJI_CORRECT)); setConfetti(true); setTimeout(() => setConfetti(false), 1200)
+      const nextConsec = consecCorrect + 1
+      setConsecCorrect(nextConsec)
+      // Easter egg: check consecutive correct threshold
+      if (nextConsec % EASTER_EGG_CONFIG.consecCorrectThreshold === 0 && Math.random() < EASTER_EGG_CONFIG.triggerProbability) {
+        setShowEgg(true)
+      }
+    } else {
+      playFail(); setHumorMsg(pick(WRONG)); setHumorEmoji(pick(EMOJI_WRONG))
+      setConsecCorrect(0)
+    }
+
+    // Easter egg: check time threshold
+    const elapsed = Date.now() - lastTimeCheck.current
+    if (elapsed >= EASTER_EGG_CONFIG.timeThresholdMinutes * 60000) {
+      lastTimeCheck.current = Date.now()
+      if (Math.random() < EASTER_EGG_CONFIG.triggerProbability) {
+        setShowEgg(true)
+      }
+    }
     setTimeout(() => { setHumorMsg(null); setHumorEmoji(null) }, 2000)
 
     const prevProgress = getWordProgress(currentWord.id)
@@ -365,6 +389,7 @@ export default function Flashcard() {
           按 <kbd className="px-1.5 py-0.5 bg-surface-100 rounded text-surface-400 font-mono text-[11px] border border-surface-200">→</kbd> 认识
         </p>
       </div>
+      <EasterEgg show={showEgg} onClose={() => setShowEgg(false)} />
     </div>
   )
 }

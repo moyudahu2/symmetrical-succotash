@@ -5,7 +5,8 @@ import { Check, X, ArrowRight, RotateCcw, Volume2, BarChart3, BookOpen } from 'l
 import { playClick, playSuccess, playFail } from '../utils/audio'
 import useTTS from '../hooks/useTTS'
 import BackButton from './BackButton'
-import { CORRECT, WRONG, DONE, LOADING, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, pick } from '../utils/humorConstants'
+import { CORRECT, WRONG, DONE, LOADING, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, EASTER_EGG_CONFIG, pick } from '../utils/humorConstants'
+import EasterEgg from './EasterEgg'
 
 const defGroups = wordsData.reduce((acc, w) => {
   if (!acc[w.definition]) acc[w.definition] = []
@@ -35,6 +36,9 @@ export default function Quiz() {
   const [autoAdvancing, setAutoAdvancing] = useState(false)
   const [humorMsg, setHumorMsg] = useState(null)
   const [humorEmoji, setHumorEmoji] = useState(null)
+  const [consecCorrect, setConsecCorrect] = useState(0)
+  const [showEgg, setShowEgg] = useState(false)
+  const lastTimeCheck = useRef(Date.now())
   const [progressPhrase] = useState(() => pick(PROGRESS_PHRASES))
   const optionRefs = useRef([])
   const autoAdvanceTimer = useRef(null)
@@ -92,6 +96,11 @@ export default function Quiz() {
       setHumorMsg(pick(CORRECT))
       setHumorEmoji(pick(EMOJI_CORRECT))
       setTimeout(() => { setHumorMsg(null); setHumorEmoji(null) }, 2000)
+      const nextConsec = consecCorrect + 1
+      setConsecCorrect(nextConsec)
+      if (nextConsec % EASTER_EGG_CONFIG.consecCorrectThreshold === 0 && Math.random() < EASTER_EGG_CONFIG.triggerProbability) {
+        setShowEgg(true)
+      }
       setAutoAdvancing(true)
       autoAdvanceTimer.current = setTimeout(() => {
         autoAdvanceTimer.current = null
@@ -110,6 +119,16 @@ export default function Quiz() {
       setHumorMsg(pick(WRONG))
       setHumorEmoji(pick(EMOJI_WRONG))
       setTimeout(() => { setHumorMsg(null); setHumorEmoji(null) }, 2500)
+      setConsecCorrect(0)
+    }
+
+    // Time-based egg check
+    const elapsed = Date.now() - lastTimeCheck.current
+    if (elapsed >= EASTER_EGG_CONFIG.timeThresholdMinutes * 60000) {
+      lastTimeCheck.current = Date.now()
+      if (Math.random() < EASTER_EGG_CONFIG.triggerProbability) {
+        setShowEgg(true)
+      }
     }
 
     setScore(prev => ({
@@ -366,6 +385,7 @@ export default function Quiz() {
           </motion.button>
         )}
       </div>
+      <EasterEgg show={showEgg} onClose={() => setShowEgg(false)} />
     </div>
   )
 }

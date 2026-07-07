@@ -72,6 +72,35 @@ export const PROGRESS_PHRASES = [
   '今日份摸鱼已完成 {done}%',
 ]
 
+export const EASTER_EGGS = [
+  { emoji: '🧠', text: '背单词就像吃薯片，停不下来的！', type: 'encourage' },
+  { emoji: '🐟', text: '单词：你不要过来啊！！！', type: 'humor' },
+  { emoji: '💡', text: '研究发现，背单词最好的时间是睡前——因为你一躺下就睡着了，根本不记得背了什么。', type: 'cold' },
+  { emoji: '📖', text: 'CET-4 词汇量要求约 4500 词，相当于每天背 12 个词，坚持一年。当然，你也可以一天背完——然后忘掉 90%。', type: 'cold' },
+  { emoji: '🤓', text: '你知道 "quiz" 这个词是怎么来的吗？据说是某个老师随手写的，后来成了"测验"的意思。哦对了，你正在做 quiz。', type: 'cold' },
+  { emoji: '🫠', text: '背了忘，忘了背——人类的本质是复读机。', type: 'encourage' },
+  { emoji: '🎯', text: '四级考试其实没有那么难——难的是你始终不翻开书。', type: 'encourage' },
+  { emoji: '🐌', text: '慢一点没关系，只要不停下来。毕竟龟兔赛跑里，兔子也没在背单词。', type: 'encourage' },
+  { emoji: '🤯', text: '你的脑子现在就像一个打开的浏览器——有 47 个标签页，但你就是找不到单词那个。', type: 'humor' },
+  { emoji: '🌚', text: '当代大学生三大幻觉：明天开始背单词、这次一定能过、这题我见过。', type: 'humor' },
+  { emoji: '🔁', text: '"abandon" 是四级词汇第一个词。有多少人背到 "abandon" 就 abandon 了？', type: 'cold' },
+  { emoji: '🧩', text: '学英语就像拼拼图——你永远找不到最后一块，但拼完的那一刻还挺有成就感的。', type: 'encourage' },
+  { emoji: '🎪', text: '背单词不是目的，过四级才是。过四级不是目的，不挂科才是。不挂科也不是目的——算了，人生苦短，开心就好。', type: 'humor' },
+  { emoji: '🔋', text: '知识就是力量——但睡觉才能恢复精力。所以，累了就去睡，别硬撑。', type: 'encourage' },
+  { emoji: '🎭', text: '你在背单词的时候，单词也在背你。', type: 'humor' },
+  { emoji: '🧸', text: '四级证书的真正用途：毕业后用来垫桌脚。但前提是——你得先有。', type: 'humor' },
+  { emoji: '🌊', text: '学海无涯，回头是岸。但你已经游了这么远了，再坚持一下吧。', type: 'encourage' },
+  { emoji: '🎠', text: '有些单词长得很像，比如 "dessert"（甜点）和 "desert"（沙漠）。记住：甜点有两个 s，因为你想吃两份。', type: 'cold' },
+  { emoji: '🦥', text: '树懒的速度大概是每秒 0.03 米。而你背一个单词的速度...算了，不提了。', type: 'humor' },
+  { emoji: '🎁', text: '恭喜你触发隐藏彩蛋！奖励你一个知识点：这篇文案本身就是知识点。', type: 'humor' },
+]
+
+export const EASTER_EGG_CONFIG = {
+  consecCorrectThreshold: 5,
+  timeThresholdMinutes: 10,
+  triggerProbability: 0.2,
+}
+
 export function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)]
 }
