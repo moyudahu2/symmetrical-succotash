@@ -7,7 +7,7 @@ import { playSuccess, playFail, playFlip, playStarOn, playStarOff } from '../uti
 import useTTS from '../hooks/useTTS'
 import { getTodayQueue, markWordStudied, getTodayProgress, loadPlan } from '../utils/studyPlan'
 import BackButton from './BackButton'
-import { LOADING, CORRECT, WRONG, DONE, LOADING_WORDS, pick } from '../utils/humorConstants'
+import { LOADING, CORRECT, WRONG, DONE, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, LOADING_WORDS, pick } from '../utils/humorConstants'
 
 const MAX_LOAD_RETRIES = 3
 
@@ -19,11 +19,14 @@ export default function Flashcard() {
   const [animating, setAnimating] = useState(false)
   const [flash, setFlash] = useState(null)
   const [feedbackClass, setFeedbackClass] = useState('')
+  const [confetti, setConfetti] = useState(false)
   const [starred, setStarred] = useState(false)
   const [starAnim, setStarAnim] = useState(false)
   const [loadingError, setLoadingError] = useState(null)
   const [humorMsg, setHumorMsg] = useState(null)
+  const [humorEmoji, setHumorEmoji] = useState(null)
   const [loadingCopy, setLoadingCopy] = useState(LOADING_WORDS)
+  const [progressPhrase] = useState(() => pick(PROGRESS_PHRASES))
   const navigate = useNavigate()
   const containerRef = useRef(null)
   const loadAttempt = useRef(0)
@@ -81,9 +84,9 @@ export default function Flashcard() {
     setAnimating(true)
     setFlash(isKnown ? 'known' : 'unknown')
     setFeedbackClass(isKnown ? 'bounce-correct' : 'shake-wrong')
-    if (isKnown) { playSuccess(); setHumorMsg(pick(CORRECT)) }
-    else { playFail(); setHumorMsg(pick(WRONG)) }
-    setTimeout(() => setHumorMsg(null), 1800)
+    if (isKnown) { playSuccess(); setHumorMsg(pick(CORRECT)); setHumorEmoji(pick(EMOJI_CORRECT)); setConfetti(true); setTimeout(() => setConfetti(false), 1200) }
+    else { playFail(); setHumorMsg(pick(WRONG)); setHumorEmoji(pick(EMOJI_WRONG)) }
+    setTimeout(() => { setHumorMsg(null); setHumorEmoji(null) }, 2000)
 
     const prevProgress = getWordProgress(currentWord.id)
     const newSrs = calculateSrs(prevProgress, isKnown)
@@ -202,28 +205,22 @@ export default function Flashcard() {
   return (
     <div className="flex flex-col items-center px-4 py-6 sm:py-10" ref={containerRef}>
       <BackButton />
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md relative">
         {/* Progress indicator */}
-        <div className="flex items-center justify-between mb-5">
-          <span className="text-xs font-medium text-surface-400 bg-surface-100 px-2.5 py-1 rounded-full">
-            {currentIndex + 1} / {dueWords.length}
-          </span>
-          <div className="flex gap-1.5">
-            {dueWords.slice(0, 20).map((_, i) => (
-              <div
-                key={i}
-                className={`rounded-full transition-all duration-300 ${
-                  i === currentIndex
-                    ? 'w-2.5 h-2.5 bg-primary-500 dot-active'
-                    : i < currentIndex
-                    ? 'w-2 h-2 bg-primary-300'
-                    : 'w-2 h-2 bg-surface-200'
-                }`}
-              />
-            ))}
-            {dueWords.length > 20 && (
-              <span className="text-xs text-surface-400 ml-1 self-center">+{dueWords.length - 20}</span>
-            )}
+        <div className="mb-5">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-xs font-medium text-surface-400">
+              {progressPhrase.replace('{remain}', dueWords.length - currentIndex - 1).replace('{done}', Math.round((currentIndex / dueWords.length) * 100))}
+            </span>
+            <span className="text-xs font-medium text-surface-400 bg-surface-100 px-2 py-0.5 rounded-full">
+              {currentIndex + 1} / {dueWords.length}
+            </span>
+          </div>
+          <div className="w-full bg-surface-100 rounded-full h-2 overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-primary-300 via-primary-500 to-accent-500 rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${(currentIndex / dueWords.length) * 100}%` }}
+            />
           </div>
         </div>
 
@@ -308,10 +305,35 @@ export default function Flashcard() {
           </div>
         </div>
 
+        {/* Confetti burst */}
+        {confetti && (
+          <div className="absolute inset-0 pointer-events-none overflow-hidden z-10" style={{ perspective: '200px' }}>
+            {Array.from({ length: 18 }).map((_, i) => {
+              const colors = ['bg-primary-400', 'bg-accent-400', 'bg-green-400', 'bg-yellow-400', 'bg-rose-400', 'bg-blue-400']
+              const color = colors[i % colors.length]
+              const left = 10 + Math.random() * 80
+              const delay = Math.random() * 0.2
+              const size = 4 + Math.random() * 6
+              return (
+                <div
+                  key={i}
+                  className={`absolute bottom-0 rounded-full ${color} confetti-particle`}
+                  style={{
+                    left: `${left}%`,
+                    width: size, height: size,
+                    animationDelay: `${delay}s`,
+                    animationDuration: `${0.6 + Math.random() * 0.4}s`,
+                  }}
+                />
+              )
+            })}
+          </div>
+        )}
+
         {/* Humor feedback */}
         {humorMsg && (
           <div className="flex items-center justify-center gap-2 mb-4 animate-[fade-down_0.3s_ease-out]">
-            <MessageCircle className="w-4 h-4 text-primary-400 shrink-0" />
+            {humorEmoji && <span className="text-xl animate-[scale-in_0.3s_cubic-bezier(0.34,1.56,0.64,1)]">{humorEmoji}</span>}
             <span className="text-sm text-primary-500 font-medium italic">{humorMsg}</span>
           </div>
         )}

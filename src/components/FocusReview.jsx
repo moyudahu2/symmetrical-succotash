@@ -9,7 +9,7 @@ import {
 import { playSuccess, playFail, playFlip, playStarOn, playStarOff } from '../utils/audio'
 import useTTS from '../hooks/useTTS'
 import BackButton from './BackButton'
-import { LOADING, CORRECT, WRONG, DONE, pick } from '../utils/humorConstants'
+import { LOADING, CORRECT, WRONG, DONE, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, pick } from '../utils/humorConstants'
 
 const FILTERS = [
   { key: 'all', label: '全部重点词', icon: AlertTriangle },
@@ -31,7 +31,9 @@ export default function FocusReview() {
   const [starAnimId, setStarAnimId] = useState(null)
   const [isDone, setIsDone] = useState(false)
   const [humorMsg, setHumorMsg] = useState(null)
+  const [humorEmoji, setHumorEmoji] = useState(null)
   const [loadingCopy, setLoadingCopy] = useState('加载中...')
+  const [progressPhrase] = useState(() => pick(PROGRESS_PHRASES))
   const { speaking, autoplayBlocked, toggle: speakWord, speak, preload } = useTTS()
 
   useEffect(() => {
@@ -107,9 +109,9 @@ export default function FocusReview() {
     setAnimating(true)
     setFlash(isKnown ? 'known' : 'unknown')
     setFeedbackClass(isKnown ? 'bounce-correct' : 'shake-wrong')
-    if (isKnown) { playSuccess(); setHumorMsg(pick(CORRECT)) }
-    else { playFail(); setHumorMsg(pick(WRONG)) }
-    setTimeout(() => setHumorMsg(null), 1800)
+    if (isKnown) { playSuccess(); setHumorMsg(pick(CORRECT)); setHumorEmoji(pick(EMOJI_CORRECT)) }
+    else { playFail(); setHumorMsg(pick(WRONG)); setHumorEmoji(pick(EMOJI_WRONG)) }
+    setTimeout(() => { setHumorMsg(null); setHumorEmoji(null) }, 2000)
 
     const prevProgress = getWordProgress(currentWord.id)
     const newSrs = calculateSrs(prevProgress, isKnown)
@@ -190,11 +192,19 @@ export default function FocusReview() {
       <div className="flex flex-col items-center px-4 py-6 sm:py-10">
         <div className="w-full max-w-md">
           {/* Header */}
-          <div className="flex items-center justify-between mb-5">
-            {reviewBack}
-            <span className="text-xs font-medium text-surface-400 bg-surface-100 px-2.5 py-1 rounded-full">
-              {currentIndex + 1} / {words.length}
-            </span>
+          <div className="mb-5">
+            <div className="flex items-center justify-between mb-1.5">
+              {reviewBack}
+              <span className="text-xs font-medium text-surface-400">
+                {progressPhrase.replace('{remain}', words.length - currentIndex - 1).replace('{done}', Math.round((currentIndex / words.length) * 100))}
+              </span>
+            </div>
+            <div className="w-full bg-surface-100 rounded-full h-1.5 overflow-hidden mt-2">
+              <div
+                className="h-full bg-gradient-to-r from-rose-300 via-rose-500 to-rose-500 rounded-full transition-all duration-500 ease-out"
+                style={{ width: `${(currentIndex / words.length) * 100}%` }}
+              />
+            </div>
           </div>
 
           {/* Card */}
@@ -268,6 +278,7 @@ export default function FocusReview() {
           {/* Humor feedback */}
           {humorMsg && (
             <div className="flex items-center justify-center gap-2 mb-4 animate-[fade-down_0.3s_ease-out]">
+              {humorEmoji && <span className="text-xl animate-[scale-in_0.3s_cubic-bezier(0.34,1.56,0.64,1)]">{humorEmoji}</span>}
               <span className="text-sm text-primary-500 font-medium italic">{humorMsg}</span>
             </div>
           )}

@@ -58,6 +58,20 @@ export const DONE = [
 
 export const LOADING_WORDS = '单词正在赶来...'
 
+export const EMOJI_CORRECT = ['🎉', '🌟', '💪', '🎊', '✨', '🏆', '👑', '🚀', '🔥', '💯', '⭐', '🥇']
+
+export const EMOJI_WRONG = ['😅', '🤔', '💭', '😵', '🫠', '🤷', '💀', '😬', '🙃', '🥴']
+
+export const PROGRESS_PHRASES = [
+  '摸鱼进度',
+  '距离大脑升级还差 {remain} 词',
+  '脑容量加载中',
+  '单词征服进度',
+  '四级通关进度',
+  '距离学神还有 {remain} 步',
+  '今日份摸鱼已完成 {done}%',
+]
+
 export function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)]
 }

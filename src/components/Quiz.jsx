@@ -5,7 +5,7 @@ import { Check, X, ArrowRight, RotateCcw, Volume2, BarChart3, BookOpen } from 'l
 import { playClick, playSuccess, playFail } from '../utils/audio'
 import useTTS from '../hooks/useTTS'
 import BackButton from './BackButton'
-import { CORRECT, WRONG, DONE, LOADING, pick } from '../utils/humorConstants'
+import { CORRECT, WRONG, DONE, LOADING, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, pick } from '../utils/humorConstants'
 
 const defGroups = wordsData.reduce((acc, w) => {
   if (!acc[w.definition]) acc[w.definition] = []
@@ -34,6 +34,8 @@ export default function Quiz() {
   const [animOption, setAnimOption] = useState(null)
   const [autoAdvancing, setAutoAdvancing] = useState(false)
   const [humorMsg, setHumorMsg] = useState(null)
+  const [humorEmoji, setHumorEmoji] = useState(null)
+  const [progressPhrase] = useState(() => pick(PROGRESS_PHRASES))
   const optionRefs = useRef([])
   const autoAdvanceTimer = useRef(null)
 
@@ -88,7 +90,8 @@ export default function Quiz() {
     if (isCorrect) {
       setTimeout(() => playSuccess(), 80)
       setHumorMsg(pick(CORRECT))
-      setTimeout(() => setHumorMsg(null), 1800)
+      setHumorEmoji(pick(EMOJI_CORRECT))
+      setTimeout(() => { setHumorMsg(null); setHumorEmoji(null) }, 2000)
       setAutoAdvancing(true)
       autoAdvanceTimer.current = setTimeout(() => {
         autoAdvanceTimer.current = null
@@ -105,7 +108,8 @@ export default function Quiz() {
     } else {
       setTimeout(() => playFail(), 80)
       setHumorMsg(pick(WRONG))
-      setTimeout(() => setHumorMsg(null), 2500)
+      setHumorEmoji(pick(EMOJI_WRONG))
+      setTimeout(() => { setHumorMsg(null); setHumorEmoji(null) }, 2500)
     }
 
     setScore(prev => ({
@@ -200,9 +204,9 @@ export default function Quiz() {
       <div className="w-full max-w-md">
         {/* Progress bar */}
         <div className="mb-5">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-surface-400 bg-surface-100 px-2.5 py-1 rounded-full">
-              {currentIndex + 1} / {questions.length}
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-xs font-medium text-surface-400">
+              {progressPhrase.replace('{remain}', questions.length - currentIndex - 1).replace('{done}', Math.round((currentIndex / questions.length) * 100))}
             </span>
             <div className="flex items-center gap-2">
               <BarChart3 className="w-3.5 h-3.5 text-surface-300" />
@@ -309,6 +313,7 @@ export default function Quiz() {
         {/* Humor feedback */}
         {humorMsg && (
           <div className="flex items-center justify-center gap-2 mt-5 mb-2 animate-[fade-down_0.3s_ease-out]">
+            {humorEmoji && <span className="text-xl animate-[scale-in_0.3s_cubic-bezier(0.34,1.56,0.64,1)]">{humorEmoji}</span>}
             <span className="text-sm text-primary-500 font-medium italic">{humorMsg}</span>
           </div>
         )}
