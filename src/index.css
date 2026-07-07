@@ -1,0 +1,367 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply text-surface-800 antialiased;
+    font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont,
+      'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    touch-action: manipulation;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    @apply bg-primary-100 text-primary-800;
+  }
+}
+
+@layer components {
+  /* ── Card Flip ── */
+  .card-flip {
+    perspective: 1000px;
+  }
+  .card-flip-inner {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+  }
+  .card-flip-inner.flipped {
+    transform: rotateY(180deg);
+  }
+  .card-face {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .card-back {
+    transform: rotateY(180deg);
+  }
+
+  /* ── Core Button Press ── */
+  .btn-press {
+    @apply transition-all duration-150 active:scale-[0.96] select-none;
+  }
+  .btn-press-soft {
+    @apply transition-all duration-150 active:scale-[0.98] select-none;
+  }
+
+  /* ── Ripple ── */
+  .ripple {
+    position: relative;
+    overflow: hidden;
+  }
+  .ripple::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255,255,255,0.35) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .ripple:active::after {
+    opacity: 1;
+    transition: opacity 0s;
+  }
+
+  /* ── Feedback Flash ── */
+  .flash-known {
+    animation: flash-green 0.5s ease-out;
+  }
+  .flash-unknown {
+    animation: flash-red 0.5s ease-out;
+  }
+
+  /* ── Bounce on known (correct) ── */
+  .bounce-correct {
+    animation: bounce-correct 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  /* ── Shake on unknown (wrong) ── */
+  .shake-wrong {
+    animation: shake-wrong 0.45s ease-out;
+  }
+
+  /* ── Bounce / shake for Quiz options ── */
+  .option-bounce {
+    animation: option-bounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .option-shake {
+    animation: option-shake 0.4s ease-out;
+  }
+
+  /* ── Ripple ring for correct / wrong ── */
+  .ring-correct {
+    animation: ring-correct 0.6s ease-out;
+  }
+  .ring-wrong {
+    animation: ring-wrong 0.6s ease-out;
+  }
+
+  /* ── Page transition ── */
+  .page-enter {
+    animation: page-enter 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ── Score pop ── */
+  .score-pop {
+    animation: score-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* ── Progress dot wriggle ── */
+  .dot-active {
+    animation: dot-wriggle 0.6s ease-in-out infinite;
+  }
+
+  /* ── Ripple overlay (for buttons) ── */
+  .ripple-overlay {
+    position: relative;
+    overflow: hidden;
+  }
+  .ripple-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.3) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .ripple-overlay:active::before {
+    opacity: 1;
+    transition: opacity 0s;
+  }
+
+  /* ── Card lift ── */
+  .card-lift {
+    @apply transition-all duration-200;
+  }
+  .card-lift:hover {
+    @apply -translate-y-1 shadow-soft-lg;
+  }
+
+  /* ── Gradient text ── */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-primary-700;
+  }
+
+  /* ── Safe areas ── */
+  .safe-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* ── Scrollbar hide ── */
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ── Thin scrollbar ── */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.surface.200') transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: theme('colors.surface.200');
+    border-radius: 2px;
+  }
+
+  /* ── Glass ── */
+  .glass {
+    @apply bg-white/80 backdrop-blur-lg border border-white/20;
+  }
+
+  /* ── Animated underline ── */
+  .nav-indicator {
+    position: relative;
+  }
+  .nav-indicator::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2.5px;
+    border-radius: 999px;
+    background: theme('colors.primary.500');
+    transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .nav-indicator.active::after {
+    width: 60%;
+  }
+
+  /* ── Skeleton pulse ── */
+  .skeleton {
+    @apply bg-surface-200 animate-pulse rounded;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* ════════════════════════════════════════════
+   Keyframes
+   ════════════════════════════════════════════ */
+
+/* ── Existing ── */
+@keyframes flash-green {
+  0%   { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+  50%  { box-shadow: 0 0 0 14px rgba(34, 197, 94, 0.15); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+@keyframes flash-red {
+  0%   { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+  50%  { box-shadow: 0 0 0 14px rgba(239, 68, 68, 0.15); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+/* ── Bounce on correct ── */
+@keyframes bounce-correct {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.04); }
+  60%  { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+
+/* ── Shake on wrong ── */
+@keyframes shake-wrong {
+  0%, 100% { transform: translateX(0); }
+  15%      { transform: translateX(-6px); }
+  30%      { transform: translateX(5px); }
+  45%      { transform: translateX(-4px); }
+  60%      { transform: translateX(3px); }
+  75%      { transform: translateX(-2px); }
+  90%      { transform: translateX(1px); }
+}
+
+/* ── Quiz option bounce ── */
+@keyframes option-bounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+/* ── Quiz option shake ── */
+@keyframes option-shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-5px); }
+  40%      { transform: translateX(4px); }
+  60%      { transform: translateX(-3px); }
+  80%      { transform: translateX(2px); }
+}
+
+/* ── Ripple ring (correct) ── */
+@keyframes ring-correct {
+  0%   { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+  100% { box-shadow: 0 0 0 16px rgba(34, 197, 94, 0); }
+}
+
+/* ── Ripple ring (wrong) ── */
+@keyframes ring-wrong {
+  0%   { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  100% { box-shadow: 0 0 0 16px rgba(239, 68, 68, 0); }
+}
+
+/* ── Page enter ── */
+@keyframes page-enter {
+  0%   { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Score pop ── */
+@keyframes score-pop {
+  0%   { transform: scale(0.5); opacity: 0; }
+  60%  { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ── Progress dot wriggle ── */
+@keyframes dot-wriggle {
+  0%, 100% { transform: scaleY(1); }
+  50%      { transform: scaleY(1.6); }
+}
+
+/* ── Soft scale in (for modals / cards) ── */
+@keyframes scale-in {
+  0%   { opacity: 0; transform: scale(0.92); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* ── Slide up with bounce ── */
+@keyframes slide-up-bounce {
+  0%   { opacity: 0; transform: translateY(30px); }
+  70%  { transform: translateY(-4px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Fade in left (for list rows) ── */
+@keyframes fade-in-left {
+  0%   { opacity: 0; transform: translateX(-8px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Confetti-like pop for completion ── */
+@keyframes confetti-pop {
+  0%   { transform: scale(0) rotate(0deg); opacity: 0; }
+  50%  { transform: scale(1.2) rotate(180deg); opacity: 1; }
+  100% { transform: scale(1) rotate(360deg); opacity: 1; }
+}
+
+/* ── Gradient shift for progress bars ── */
+@keyframes gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ── Star pop animation ── */
+@keyframes star-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.35); }
+  70%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+.star-pop {
+  animation: star-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Star fill transition ── */
+.star-btn svg {
+  transition: transform 0.15s ease, fill 0.15s ease;
+}
+
+/* ── TTS speaker wave ── */
+@keyframes speaker-wave {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50%      { opacity: 1; transform: scaleY(1.5); }
+}
+.speaker-wave rect:nth-child(1) { animation: speaker-wave 0.5s ease-in-out infinite; animation-delay: 0s; }
+.speaker-wave rect:nth-child(2) { animation: speaker-wave 0.5s ease-in-out infinite; animation-delay: 0.1s; }
+.speaker-wave rect:nth-child(3) { animation: speaker-wave 0.5s ease-in-out infinite; animation-delay: 0.2s; }
