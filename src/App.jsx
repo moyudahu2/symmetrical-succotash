@@ -9,6 +9,8 @@ import FocusReview from './components/FocusReview'
 import { FishProvider } from './utils/FishContext'
 import { SkinProvider } from './utils/SkinContext'
 import FishToast from './components/FishToast'
+import FishRain from './components/FishRain'
+import FishBalance from './components/FishBalance'
 import SkinStore from './components/SkinStore'
 import { LOADING as LOADING_COPY, pick } from './utils/humorConstants'
 
@@ -27,6 +29,8 @@ export default function App() {
       <FishProvider>
         <SkinProvider>
           <FishToast />
+          <FishRain />
+          <FishBalance />
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/study" element={<HubPage />} />
