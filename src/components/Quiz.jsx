@@ -7,6 +7,7 @@ import useTTS from '../hooks/useTTS'
 import BackButton from './BackButton'
 import { CORRECT, WRONG, DONE, LOADING, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, EASTER_EGG_CONFIG, pick } from '../utils/humorConstants'
 import EasterEgg from './EasterEgg'
+import { useFish } from '../utils/FishContext'
 
 const defGroups = wordsData.reduce((acc, w) => {
   if (!acc[w.definition]) acc[w.definition] = []
@@ -96,8 +97,10 @@ export default function Quiz() {
       setHumorMsg(pick(CORRECT))
       setHumorEmoji(pick(EMOJI_CORRECT))
       setTimeout(() => { setHumorMsg(null); setHumorEmoji(null) }, 2000)
+      addFish(1)
       const nextConsec = consecCorrect + 1
       setConsecCorrect(nextConsec)
+      if (nextConsec % 5 === 0) addFish(5, '摸鱼大师')
       if (nextConsec % EASTER_EGG_CONFIG.consecCorrectThreshold === 0 && Math.random() < EASTER_EGG_CONFIG.triggerProbability) {
         setShowEgg(true)
       }
@@ -150,6 +153,7 @@ export default function Quiz() {
     }
   }, [currentIndex, questions.length])
 
+  const { addFish } = useFish()
   const { speaking, autoplayBlocked, toggle: speakWord, speak, preload } = useTTS()
 
   useEffect(() => {

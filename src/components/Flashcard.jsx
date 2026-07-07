@@ -9,6 +9,7 @@ import { getTodayQueue, markWordStudied, getTodayProgress, loadPlan } from '../u
 import BackButton from './BackButton'
 import { LOADING, CORRECT, WRONG, DONE, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, LOADING_WORDS, EASTER_EGG_CONFIG, pick } from '../utils/humorConstants'
 import EasterEgg from './EasterEgg'
+import { useFish } from '../utils/FishContext'
 
 const MAX_LOAD_RETRIES = 3
 
@@ -35,6 +36,7 @@ export default function Flashcard() {
   const navigate = useNavigate()
   const containerRef = useRef(null)
   const loadAttempt = useRef(0)
+  const { addFish } = useFish()
 
   useEffect(() => {
     loadAttempt.current = 0
@@ -91,8 +93,10 @@ export default function Flashcard() {
     setFeedbackClass(isKnown ? 'bounce-correct' : 'shake-wrong')
     if (isKnown) {
       playSuccess(); setHumorMsg(pick(CORRECT)); setHumorEmoji(pick(EMOJI_CORRECT)); setConfetti(true); setTimeout(() => setConfetti(false), 1200)
+      addFish(1)
       const nextConsec = consecCorrect + 1
       setConsecCorrect(nextConsec)
+      if (nextConsec % 5 === 0) addFish(5, '摸鱼大师')
       // Easter egg: check consecutive correct threshold
       if (nextConsec % EASTER_EGG_CONFIG.consecCorrectThreshold === 0 && Math.random() < EASTER_EGG_CONFIG.triggerProbability) {
         setShowEgg(true)
