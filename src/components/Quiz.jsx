@@ -97,7 +97,6 @@ export default function Quiz() {
       setHumorMsg(pick(CORRECT))
       setHumorEmoji(pick(EMOJI_CORRECT))
       setTimeout(() => { setHumorMsg(null); setHumorEmoji(null) }, 2000)
-      addFish(1)
       const nextConsec = consecCorrect + 1
       setConsecCorrect(nextConsec)
       if (nextConsec % 5 === 0) addFish(5, '摸鱼大师')
