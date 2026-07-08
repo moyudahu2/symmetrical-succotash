@@ -6,7 +6,7 @@ import { playClick, playSuccess, playFail } from '../utils/audio'
 import useTTS from '../hooks/useTTS'
 import BackButton from './BackButton'
 import WordImage from './WordImage'
-import { CORRECT, WRONG, DONE, LOADING, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, EASTER_EGG_CONFIG, pick } from '../utils/humorConstants'
+import { CORRECT, WRONG, DONE, LOADING, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, EASTER_EGG_CONFIG, checkMilestone, isEggCooldownElapsed, markEggShown, pick } from '../utils/humorConstants'
 import EasterEgg from './EasterEgg'
 import { useFish } from '../utils/FishContext'
 
@@ -101,7 +101,8 @@ export default function Quiz() {
       const nextConsec = consecCorrect + 1
       setConsecCorrect(nextConsec)
       if (nextConsec % 5 === 0) addFish(5, '鎽搁奔澶у笀')
-      if (nextConsec % EASTER_EGG_CONFIG.consecCorrectThreshold === 0 && Math.random() < EASTER_EGG_CONFIG.triggerProbability) {
+      if (nextConsec % EASTER_EGG_CONFIG.consecCorrectThreshold === 0 && Math.random() < EASTER_EGG_CONFIG.triggerProbability && isEggCooldownElapsed()) {
+        markEggShown()
         setShowEgg(true)
       }
       setAutoAdvancing(true)
@@ -125,11 +126,26 @@ export default function Quiz() {
       setConsecCorrect(0)
     }
 
-    // Time-based egg check
+    // Time-based egg check (low probability)
     const elapsed = Date.now() - lastTimeCheck.current
     if (elapsed >= EASTER_EGG_CONFIG.timeThresholdMinutes * 60000) {
       lastTimeCheck.current = Date.now()
-      if (Math.random() < EASTER_EGG_CONFIG.triggerProbability) {
+      if (Math.random() < EASTER_EGG_CONFIG.triggerProbability && isEggCooldownElapsed()) {
+        markEggShown()
+        setShowEgg(true)
+      }
+    }
+
+    // Milestone check (guaranteed one-time)
+    if (isEggCooldownElapsed()) {
+      let studiedCount = 0
+      try {
+        const raw = JSON.parse(localStorage.getItem('srsProgress') || '{}')
+        studiedCount = Object.keys(raw).length
+      } catch {}
+      const milestone = checkMilestone(studiedCount)
+      if (milestone) {
+        markEggShown()
         setShowEgg(true)
       }
     }

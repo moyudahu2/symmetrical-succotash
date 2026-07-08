@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import { recordCheckIn } from './humorConstants'
 
 const STORAGE_KEY = 'saltedFishCount'
 const CHECKIN_KEY = 'lastFishCheckIn'
@@ -36,6 +37,7 @@ export function FishProvider({ children }) {
     const today = todayStr()
     if (last !== today) {
       saveCheckIn(today)
+      recordCheckIn()
       setCount(c => { const n = c + 10; saveFish(n); return n })
       setDailyBonus(true)
       triggerRain(10)

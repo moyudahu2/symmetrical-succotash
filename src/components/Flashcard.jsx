@@ -7,7 +7,7 @@ import { playSuccess, playFail, playFlip, playStarOn, playStarOff } from '../uti
 import useTTS from '../hooks/useTTS'
 import { getTodayQueue, markWordStudied, getTodayProgress, loadPlan } from '../utils/studyPlan'
 import BackButton from './BackButton'
-import { LOADING, CORRECT, WRONG, DONE, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, LOADING_WORDS, EASTER_EGG_CONFIG, pick } from '../utils/humorConstants'
+import { LOADING, CORRECT, WRONG, DONE, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, LOADING_WORDS, EASTER_EGG_CONFIG, checkMilestone, isEggCooldownElapsed, markEggShown, pick } from '../utils/humorConstants'
 import EasterEgg from './EasterEgg'
 import WordImage from './WordImage'
 import { useFish } from '../utils/FishContext'
@@ -98,7 +98,9 @@ export default function Flashcard() {
       setConsecCorrect(nextConsec)
       if (nextConsec % 5 === 0) addFish(5, '摸鱼大师')
       // Easter egg: check consecutive correct threshold
-      if (nextConsec % EASTER_EGG_CONFIG.consecCorrectThreshold === 0 && Math.random() < EASTER_EGG_CONFIG.triggerProbability) {
+      // Easter egg: random consecutive correct trigger (low probability)
+      if (nextConsec % EASTER_EGG_CONFIG.consecCorrectThreshold === 0 && Math.random() < EASTER_EGG_CONFIG.triggerProbability && isEggCooldownElapsed()) {
+        markEggShown()
         setShowEgg(true)
       }
     } else {
@@ -106,11 +108,21 @@ export default function Flashcard() {
       setConsecCorrect(0)
     }
 
-    // Easter egg: check time threshold
+    // Easter egg: check time threshold (low probability)
     const elapsed = Date.now() - lastTimeCheck.current
     if (elapsed >= EASTER_EGG_CONFIG.timeThresholdMinutes * 60000) {
       lastTimeCheck.current = Date.now()
-      if (Math.random() < EASTER_EGG_CONFIG.triggerProbability) {
+      if (Math.random() < EASTER_EGG_CONFIG.triggerProbability && isEggCooldownElapsed()) {
+        markEggShown()
+        setShowEgg(true)
+      }
+    }
+
+    // Easter egg: milestone check (guaranteed, one-time)
+    if (isEggCooldownElapsed()) {
+      const milestone = checkMilestone(todayP.studied)
+      if (milestone) {
+        markEggShown()
         setShowEgg(true)
       }
     }

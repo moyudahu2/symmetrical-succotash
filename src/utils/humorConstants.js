@@ -98,9 +98,86 @@ export const EASTER_EGGS = [
 export const EASTER_EGG_CONFIG = {
   consecCorrectThreshold: 5,
   timeThresholdMinutes: 10,
-  triggerProbability: 0.2,
+  triggerProbability: 0.06,
+}
+
+// ─── Milestone eggs (one-time guaranteed) ───
+const MILESTONE_EGGS = {
+  first100: { emoji: '🏅', text: '词汇量突破 100！你已经完成了四级词汇的 1/45，剩下的 44/45 才是真正考验意志力的部分。', type: 'milestone' },
+  day3:     { emoji: '🔥', text: '连续打卡 3 天！你的毅力和你刷短视频的时长形成了鲜明对比。继续保持！', type: 'milestone' },
+}
+
+const MILESTONE_KEY = 'egg_milestones_done'
+const LAST_EGG_KEY = 'lastEggTime'
+const COOLDOWN_MS = 48 * 60 * 60 * 1000 // 48 hours
+
+function loadDone() {
+  try { return JSON.parse(localStorage.getItem(MILESTONE_KEY) || '{}') } catch { return {} }
+}
+
+function saveDone(d) {
+  try { localStorage.setItem(MILESTONE_KEY, JSON.stringify(d)) } catch {}
+}
+
+/** Check milestone conditions. Returns { egg, reason } or null. */
+export function checkMilestone(studiedCount) {
+  const done = loadDone()
+  if (studiedCount >= 100 && !done.first100) {
+    done.first100 = true
+    saveDone(done)
+    return { egg: MILESTONE_EGGS.first100, reason: 'first100' }
+  }
+  // consecutive check-in days: read from localStorage
+  const checkinLog = localStorage.getItem('checkinLog')
+  if (checkinLog) {
+    try {
+      const days = JSON.parse(checkinLog)
+      if (days.length >= 3 && !done.day3) {
+        done.day3 = true
+        saveDone(done)
+        return { egg: MILESTONE_EGGS.day3, reason: 'day3' }
+      }
+    } catch {}
+  }
+  return null
+}
+
+/** Whether the cooldown period has elapsed since last egg. */
+export function isEggCooldownElapsed() {
+  try {
+    const last = Number(localStorage.getItem(LAST_EGG_KEY)) || 0
+    return Date.now() - last >= COOLDOWN_MS
+  } catch { return true }
+}
+
+/** Mark egg as shown (update cooldown). */
+export function markEggShown() {
+  try { localStorage.setItem(LAST_EGG_KEY, String(Date.now())) } catch {}
 }
 
 export function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)]
+}
+
+// ─── checkinLog management (used by FishContext / app init) ───
+export function recordCheckIn() {
+  const today = new Date().toISOString().slice(0, 10)
+  let log
+  try { log = JSON.parse(localStorage.getItem('checkinLog') || '[]') } catch { log = [] }
+  const last = log[log.length - 1]
+  if (last === today) return // already checked in today
+  if (last) {
+    const prev = new Date(last)
+    const diff = Math.round((new Date(today) - prev) / 86400000)
+    if (diff === 1) {
+      log.push(today) // consecutive
+    } else {
+      log = [today] // streak broken, restart
+    }
+  } else {
+    log = [today]
+  }
+  // keep only last 30 entries
+  if (log.length > 30) log = log.slice(-30)
+  try { localStorage.setItem('checkinLog', JSON.stringify(log)) } catch {}
 }
