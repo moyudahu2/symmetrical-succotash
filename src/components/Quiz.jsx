@@ -204,11 +204,10 @@ export default function Quiz() {
             {grade.emoji}
           </div>
           <h2 className="text-2xl font-bold text-surface-800 mb-2 font-display">{pick(DONE)}</h2>
-          <div className="relative my-6">
+          <div className="my-6">
             <div className="w-28 h-28 mx-auto rounded-full bg-surface-50 flex items-center justify-center border-4 border-surface-100">
               <span className="text-4xl font-bold text-gradient">{pct}%</span>
             </div>
-            <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary-400 animate-spin-slow pointer-events-none" />
           </div>
           <div className="flex items-center justify-center gap-6 mb-4">
             <div className="text-center">
