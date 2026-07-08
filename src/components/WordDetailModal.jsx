@@ -24,7 +24,7 @@ function highlightKeyword(text, keyword) {
 }
 
 export default function WordDetailModal({ word, onClose }) {
-  const { speaking, toggle: speakWord } = useTTS()
+  const { speaking, speak } = useTTS()
   const detail = useMemo(() => word ? getWordDetail(word) : null, [word?.id])
   const starred = word ? isStarred(word.id) : false
 
@@ -39,6 +39,13 @@ export default function WordDetailModal({ word, onClose }) {
       document.body.style.overflow = ''
     }
   }, [onClose])
+
+  // Auto-play example sentence on mount (browser may silently block)
+  useEffect(() => {
+    if (word?.example) {
+      try { speak(word.example) } catch {}
+    }
+  }, [word?.id])
 
   const relatedWords = detail?.relatedWords || []
 
@@ -139,7 +146,7 @@ export default function WordDetailModal({ word, onClose }) {
               </div>
               <div className="flex items-center gap-1 ml-3 shrink-0">
                 <button
-                  onClick={() => speakWord(word.word)}
+                  onClick={() => speak(word.word)}
                   className={`min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl transition-all duration-200 ${
                     speaking ? 'text-primary-500 bg-primary-50' : 'text-surface-300 hover:text-primary-500 hover:bg-primary-50'
                   }`}
