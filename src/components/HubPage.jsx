@@ -3,12 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   BookOpen, Brain, AlertTriangle, Library, LayoutDashboard,
-  Sparkles, ArrowRight, Zap, ShoppingBag, Fish
+  Sparkles, ArrowRight, Zap, ShoppingBag
 } from 'lucide-react'
 import wordsData from '../data/words'
 import { calculateStreak, getMasteredCount, getFocusWordCount, getDueWords, loadAllProgress } from '../utils/srs'
 import { playHubEnter } from '../utils/audio'
-import { useFish } from '../utils/FishContext'
 
 const MODULES = [
   {
@@ -68,7 +67,6 @@ const cardVar = {
 
 export default function HubPage() {
   const navigate = useNavigate()
-  const { count } = useFish()
   const [mastered, setMastered] = useState(0)
   const [streak, setStreak] = useState(0)
   const [stats, setStats] = useState({ focusCount: 0, dueCount: 0 })
@@ -115,10 +113,6 @@ export default function HubPage() {
             <ShoppingBag className="w-3.5 h-3.5" />
             <span>商店</span>
           </button>
-          <div className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-amber-50 text-amber-600 text-xs font-medium min-h-[36px]">
-            <Fish className="w-3.5 h-3.5" />
-            <span>{count}</span>
-          </div>
           <button
             onClick={() => navigate('/')}
             className="text-xs text-surface-400 hover:text-surface-600 px-3.5 py-2 min-h-[36px] rounded-lg hover:bg-surface-100/60 transition-all duration-200"
