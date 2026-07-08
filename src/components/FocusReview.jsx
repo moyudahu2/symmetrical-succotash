@@ -8,6 +8,7 @@ import {
 } from '../utils/srs'
 import { playSuccess, playFail, playFlip, playStarOn, playStarOff } from '../utils/audio'
 import useTTS from '../hooks/useTTS'
+import WordImage from './WordImage'
 import BackButton from './BackButton'
 import { LOADING, CORRECT, WRONG, DONE, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, pick } from '../utils/humorConstants'
 
@@ -265,8 +266,9 @@ export default function FocusReview() {
                   <span className="inline-block px-3 py-1 bg-red-50 text-red-600 text-sm rounded-full font-medium mb-4 border border-red-100">
                     {currentWord.pos}
                   </span>
-                  <h3 className="text-2xl sm:text-3xl font-bold text-surface-800 mb-3 leading-snug">{currentWord.definition}</h3>
+                  <h3 className="text-2xl sm:text-3xl font-bold text-surface-800 leading-snug">{currentWord.definition}</h3>
                 </div>
+                <WordImage word={currentWord} className="mb-3" />
                 <div className="bg-gradient-to-br from-surface-50 to-surface-100/30 rounded-xl p-4 text-left border border-surface-100">
                   <p className="text-surface-600 text-sm mb-1.5 leading-relaxed italic">"{currentWord.example}"</p>
                   <p className="text-surface-400 text-xs">{currentWord.exampleTranslation}</p>

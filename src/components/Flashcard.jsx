@@ -9,6 +9,7 @@ import { getTodayQueue, markWordStudied, getTodayProgress, loadPlan } from '../u
 import BackButton from './BackButton'
 import { LOADING, CORRECT, WRONG, DONE, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, LOADING_WORDS, EASTER_EGG_CONFIG, pick } from '../utils/humorConstants'
 import EasterEgg from './EasterEgg'
+import WordImage from './WordImage'
 import { useFish } from '../utils/FishContext'
 
 const MAX_LOAD_RETRIES = 3
@@ -342,12 +343,13 @@ export default function Flashcard() {
               >
                 <Star className={`w-5 h-5 ${starred ? 'fill-yellow-500' : ''} ${starAnim ? 'star-pop' : ''}`} onAnimationEnd={() => setStarAnim(false)} />
               </button>
-              <div className="text-center mb-5">
-                <span className="inline-block px-3 py-1 bg-primary-50 text-primary-600 text-sm rounded-full font-medium mb-4 border border-primary-100">
+              <div className="text-center mb-3">
+                <span className="inline-block px-3 py-1 bg-primary-50 text-primary-600 text-sm rounded-full font-medium mb-3 border border-primary-100">
                   {currentWord.pos}
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-bold text-surface-800 mb-3 leading-snug">{currentWord.definition}</h3>
+                <h3 className="text-2xl sm:text-3xl font-bold text-surface-800 leading-snug">{currentWord.definition}</h3>
               </div>
+              <WordImage word={currentWord} className="mb-3" />
               <div className="bg-gradient-to-br from-surface-50 to-surface-100/30 rounded-xl p-4 text-left border border-surface-100">
                 <p className="text-surface-600 text-sm mb-1.5 leading-relaxed italic">"{currentWord.example}"</p>
                 <p className="text-surface-400 text-xs">{currentWord.exampleTranslation}</p>

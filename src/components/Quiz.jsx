@@ -1,10 +1,11 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+﻿import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
 import wordsData from '../data/words'
 import { Check, X, ArrowRight, RotateCcw, Volume2, BarChart3, BookOpen } from 'lucide-react'
 import { playClick, playSuccess, playFail } from '../utils/audio'
 import useTTS from '../hooks/useTTS'
 import BackButton from './BackButton'
+import WordImage from './WordImage'
 import { CORRECT, WRONG, DONE, LOADING, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, EASTER_EGG_CONFIG, pick } from '../utils/humorConstants'
 import EasterEgg from './EasterEgg'
 import { useFish } from '../utils/FishContext'
@@ -99,7 +100,7 @@ export default function Quiz() {
       setTimeout(() => { setHumorMsg(null); setHumorEmoji(null) }, 2000)
       const nextConsec = consecCorrect + 1
       setConsecCorrect(nextConsec)
-      if (nextConsec % 5 === 0) addFish(5, '摸鱼大师')
+      if (nextConsec % 5 === 0) addFish(5, '鎽搁奔澶у笀')
       if (nextConsec % EASTER_EGG_CONFIG.consecCorrectThreshold === 0 && Math.random() < EASTER_EGG_CONFIG.triggerProbability) {
         setShowEgg(true)
       }
@@ -174,10 +175,10 @@ export default function Quiz() {
 
   if (isFinished) {
     const pct = score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0
-    const grade = pct >= 90 ? { emoji: '🌟', label: '太棒了！掌握得很好！', color: 'from-green-400 to-emerald-500' }
-      : pct >= 70 ? { emoji: '👍', label: '不错，继续加油！', color: 'from-primary-400 to-primary-500' }
-      : pct >= 50 ? { emoji: '💪', label: '需要多加复习！', color: 'from-yellow-400 to-orange-500' }
-      : { emoji: '📖', label: '别灰心，多练习就会进步！', color: 'from-surface-400 to-surface-500' }
+    const grade = pct >= 90 ? { emoji: '馃専', label: '澶浜嗭紒鎺屾彙寰楀緢濂斤紒', color: 'from-green-400 to-emerald-500' }
+      : pct >= 70 ? { emoji: '馃憤', label: '涓嶉敊锛岀户缁姞娌癸紒', color: 'from-primary-400 to-primary-500' }
+      : pct >= 50 ? { emoji: '馃挭', label: '闇€瑕佸鍔犲涔狅紒', color: 'from-yellow-400 to-orange-500' }
+      : { emoji: '馃摉', label: '鍒伆蹇冿紝澶氱粌涔犲氨浼氳繘姝ワ紒', color: 'from-surface-400 to-surface-500' }
 
     return (
       <div className="flex flex-col items-center justify-center py-16 px-4">
@@ -195,12 +196,12 @@ export default function Quiz() {
           <div className="flex items-center justify-center gap-6 mb-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-green-500">{score.correct}</div>
-              <div className="text-xs text-surface-400">正确</div>
+              <div className="text-xs text-surface-400">姝ｇ‘</div>
             </div>
             <div className="w-px h-8 bg-surface-200" />
             <div className="text-center">
               <div className="text-2xl font-bold text-red-400">{score.total - score.correct}</div>
-              <div className="text-xs text-surface-400">错误</div>
+              <div className="text-xs text-surface-400">閿欒</div>
             </div>
           </div>
           <p className="text-surface-500 text-sm mb-6">{grade.label}</p>
@@ -209,8 +210,7 @@ export default function Quiz() {
             className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl hover:from-primary-600 hover:to-primary-700 btn-press font-medium shadow-soft transition-all duration-200 min-h-[48px]"
           >
             <RotateCcw className="w-4 h-4" />
-            再来一轮
-          </button>
+            鍐嶆潵涓€杞?          </button>
         </div>
       </div>
     )
@@ -351,6 +351,7 @@ export default function Quiz() {
               <p className="text-xs text-surface-500 leading-relaxed">
                 {current.exampleTranslation}
               </p>
+              <WordImage word={current} className="mb-3" />
               <div className="mt-3 pt-3 border-t border-red-200/60 flex items-center gap-2">
                 <span className="text-[11px] px-1.5 py-0.5 bg-red-100 text-red-600 rounded font-medium">{current.pos}</span>
                 <span className="text-xs text-surface-400">
@@ -371,11 +372,11 @@ export default function Quiz() {
             className="mt-5 w-full flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl hover:from-primary-600 hover:to-primary-700 btn-press font-medium shadow-soft transition-all duration-200 min-h-[52px]"
           >
             {autoAdvancing ? (
-              <>即将跳转...</>
+              <>鍗冲皢璺宠浆...</>
             ) : currentIndex < questions.length - 1 ? (
-              <>下一题 <ArrowRight className="w-4 h-4" /></>
+              <>涓嬩竴棰?<ArrowRight className="w-4 h-4" /></>
             ) : (
-              <>查看结果 <ArrowRight className="w-4 h-4" /></>
+              <>鏌ョ湅缁撴灉 <ArrowRight className="w-4 h-4" /></>
             )}
           </motion.button>
         )}
@@ -392,3 +393,4 @@ export default function Quiz() {
     </div>
   )
 }
+

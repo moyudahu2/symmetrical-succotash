@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Volume2, Star, BookOpen, Lightbulb, Bookmark, Newspaper, MessageCircle } from 'lucide-react'
+import WordImage from './WordImage'
 import useTTS from '../hooks/useTTS'
 import { isStarred, toggleStarred } from '../utils/srs'
 import { playStarOn, playStarOff } from '../utils/audio'
-import { getWordDetail, getWordImageUrl } from '../utils/wordInfo'
+import { getWordDetail } from '../utils/wordInfo'
 
 function highlightKeyword(text, keyword) {
   if (!text || !keyword) return text
@@ -23,7 +24,6 @@ function highlightKeyword(text, keyword) {
 
 export default function WordDetailModal({ word, onClose }) {
   const { speaking, toggle: speakWord } = useTTS()
-  const [imgError, setImgError] = useState(false)
   const detail = useMemo(() => word ? getWordDetail(word) : null, [word?.id])
   const starred = word ? isStarred(word.id) : false
 
@@ -119,20 +119,8 @@ export default function WordDetailModal({ word, onClose }) {
           </button>
 
           {/* Image */}
-          <div className="h-44 sm:h-52 bg-gradient-to-br from-primary-100 via-accent-50 to-primary-50 flex items-center justify-center overflow-hidden rounded-t-2xl relative">
-            {!imgError && (
-              <img
-                src={getWordImageUrl(word)}
-                alt={word.word}
-                className="w-full h-full object-cover"
-                loading="lazy"
-                onError={() => setImgError(true)}
-              />
-            )}
-            {imgError && (
-              <BookOpen className="w-16 h-16 text-primary-200" />
-            )}
-            {/* Gradient overlay */}
+          <div className="h-44 sm:h-52 overflow-hidden rounded-t-2xl relative">
+            <WordImage word={word} className="w-full h-full" />
             <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent" />
           </div>
 

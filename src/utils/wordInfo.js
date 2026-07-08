@@ -64,10 +64,6 @@ function getRelatedWords(word, limit = 6) {
   return [...matched.map(s => s.word), ...samePosFallback]
 }
 
-export function getWordImageUrl(word) {
-  return `https://picsum.photos/seed/word${word.id}/400/300`
-}
-
 export function getWordDetail(word) {
   const rootTip = getRootTip(word)
   const relatedWords = getRelatedWords(word, 6)
