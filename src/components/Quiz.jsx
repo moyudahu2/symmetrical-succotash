@@ -6,6 +6,7 @@ import { playClick, playSuccess, playFail } from '../utils/audio'
 import useTTS from '../hooks/useTTS'
 import BackButton from './BackButton'
 import WordImage from './WordImage'
+import SpeakerBtn from './SpeakerBtn'
 import { CORRECT, WRONG, DONE, LOADING, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, EASTER_EGG_CONFIG, checkMilestone, isEggCooldownElapsed, markEggShown, pick } from '../utils/humorConstants'
 import EasterEgg from './EasterEgg'
 import { useFish } from '../utils/FishContext'
@@ -361,8 +362,9 @@ export default function Quiz() {
                 <BookOpen className="w-4 h-4 text-red-500 shrink-0" />
                 <span className="text-xs font-semibold text-red-600 uppercase tracking-wide">上下文记忆</span>
               </div>
-              <p className="text-sm text-surface-700 leading-relaxed mb-2 italic">
-                "{current.example}"
+              <p className="text-sm text-surface-700 leading-relaxed mb-2 italic flex items-start gap-1.5">
+                <span>"{current.example}"</span>
+                <SpeakerBtn text={current.example} className="mt-0.5" />
               </p>
               <p className="text-xs text-surface-500 leading-relaxed">
                 {current.exampleTranslation}

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Volume2, Star, BookOpen, Lightbulb, Bookmark, Newspaper, MessageCircle } from 'lucide-react'
 import WordImage from './WordImage'
+import SpeakerBtn from './SpeakerBtn'
 import useTTS from '../hooks/useTTS'
 import { isStarred, toggleStarred } from '../utils/srs'
 import { playStarOn, playStarOff } from '../utils/audio'
@@ -171,8 +172,9 @@ export default function WordDetailModal({ word, onClose }) {
                   <BookOpen className="w-4 h-4 text-primary-500 shrink-0" />
                   <span className="text-xs font-semibold text-primary-600 uppercase tracking-wide">例句</span>
                 </div>
-                <p className="text-sm text-surface-700 leading-relaxed mb-2 italic">
-                  "{highlightKeyword(word.example, word.word)}"
+                <p className="text-sm text-surface-700 leading-relaxed mb-2 italic flex items-start gap-1.5">
+                  <span>"{highlightKeyword(word.example, word.word)}"</span>
+                  <SpeakerBtn text={word.example} className="mt-0.5" />
                 </p>
                 <p className="text-xs text-surface-500 leading-relaxed">{word.exampleTranslation}</p>
               </div>

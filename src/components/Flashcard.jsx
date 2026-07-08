@@ -10,6 +10,7 @@ import BackButton from './BackButton'
 import { LOADING, CORRECT, WRONG, DONE, EMOJI_CORRECT, EMOJI_WRONG, PROGRESS_PHRASES, LOADING_WORDS, EASTER_EGG_CONFIG, checkMilestone, isEggCooldownElapsed, markEggShown, pick } from '../utils/humorConstants'
 import EasterEgg from './EasterEgg'
 import WordImage from './WordImage'
+import SpeakerBtn from './SpeakerBtn'
 import { useFish } from '../utils/FishContext'
 
 const MAX_LOAD_RETRIES = 3
@@ -363,7 +364,10 @@ export default function Flashcard() {
               </div>
               <WordImage word={currentWord} className="mb-3" />
               <div className="bg-gradient-to-br from-surface-50 to-surface-100/30 rounded-xl p-4 text-left border border-surface-100">
-                <p className="text-surface-600 text-sm mb-1.5 leading-relaxed italic">"{currentWord.example}"</p>
+                <p className="text-surface-600 text-sm mb-1.5 leading-relaxed italic flex items-start gap-1.5">
+                  <span>"{currentWord.example}"</span>
+                  <SpeakerBtn text={currentWord.example} className="mt-0.5" />
+                </p>
                 <p className="text-surface-400 text-xs">{currentWord.exampleTranslation}</p>
               </div>
             </div>
