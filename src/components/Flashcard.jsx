@@ -119,32 +119,36 @@ export default function Flashcard() {
       }
     }
 
-    // Easter egg: milestone check (guaranteed, one-time)
-    if (isEggCooldownElapsed()) {
-      const milestone = checkMilestone(todayP.studied)
-      if (milestone) {
-        markEggShown()
-        setShowEgg(true)
-      }
-    }
-    setTimeout(() => { setHumorMsg(null); setHumorEmoji(null) }, 2000)
-
     const prevProgress = getWordProgress(currentWord.id)
-    const newSrs = calculateSrs(prevProgress, isKnown)
-    saveWordProgress(currentWord.id, newSrs)
-    markWordStudied(currentWord.id, prevProgress)
 
-    setTimeout(() => {
-      setFlash(null)
-      setFeedbackClass('')
-      setFlipped(false)
-      if (currentIndex < dueWords.length - 1) {
-        setCurrentIndex(i => i + 1)
-      } else {
-        setIsDone(true)
-      }
-      setAnimating(false)
-    }, 450)
+    // Schedule advancement — must always run to prevent stuck UI
+    requestAnimationFrame(() => {
+      const newSrs = calculateSrs(prevProgress, isKnown)
+      saveWordProgress(currentWord.id, newSrs)
+      markWordStudied(currentWord.id, prevProgress)
+
+      // Non-critical: milestone egg
+      try {
+        if (isEggCooldownElapsed()) {
+          const studiedCount = (getTodayProgress().wordIds || []).length
+          const milestone = checkMilestone(studiedCount)
+          if (milestone) { markEggShown(); setShowEgg(true) }
+        }
+      } catch {}
+
+      setTimeout(() => {
+        setHumorMsg(null); setHumorEmoji(null)
+        setFlash(null)
+        setFeedbackClass('')
+        setFlipped(false)
+        if (currentIndex < dueWords.length - 1) {
+          setCurrentIndex(i => i + 1)
+        } else {
+          setIsDone(true)
+        }
+        setAnimating(false)
+      }, 450)
+    })
   }, [currentWord, currentIndex, dueWords.length, animating])
 
 
