@@ -36,6 +36,8 @@ export default function FocusReview() {
   const [progressPhrase] = useState(() => pick(PROGRESS_PHRASES))
   const { speaking, autoplayBlocked, toggle: speakWord, speak, preload } = useTTS()
 
+  const currentWord = reviewMode ? words[currentIndex] : null
+
   useEffect(() => {
     loadWords()
     loadStarredState()
@@ -76,8 +78,6 @@ export default function FocusReview() {
     starredIds.forEach(id => set.add(id))
     setStarred(new Set(set))
   }
-
-  const currentWord = reviewMode ? words[currentIndex] : null
 
   function handleToggleStar(wordId, e) {
     if (e) e.stopPropagation()
