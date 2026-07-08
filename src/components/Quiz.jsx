@@ -332,14 +332,6 @@ export default function Quiz() {
           })}
         </div>
 
-        {/* Humor feedback */}
-        {humorMsg && (
-          <div className="flex items-center justify-center gap-2 mt-5 mb-2 animate-[fade-down_0.3s_ease-out]">
-            {humorEmoji && <span className="text-xl animate-[scale-in_0.3s_cubic-bezier(0.34,1.56,0.64,1)]">{humorEmoji}</span>}
-            <span className="text-sm text-primary-500 font-medium italic">{humorMsg}</span>
-          </div>
-        )}
-
         {/* Error explanation card */}
         {showResult && selected !== current.correctAnswer && current.example && (
           <motion.div
@@ -386,6 +378,14 @@ export default function Quiz() {
               <>查看结果 <ArrowRight className="w-4 h-4" /></>
             )}
           </motion.button>
+        )}
+
+        {/* Humor feedback */}
+        {humorMsg && (
+          <div className="flex items-center justify-center gap-2 mt-5 mb-2 animate-[fade-down_0.3s_ease-out]">
+            {humorEmoji && <span className="text-xl animate-[scale-in_0.3s_cubic-bezier(0.34,1.56,0.64,1)]">{humorEmoji}</span>}
+            <span className="text-sm text-primary-500 font-medium italic">{humorMsg}</span>
+          </div>
         )}
       </div>
       <EasterEgg show={showEgg} onClose={() => setShowEgg(false)} />

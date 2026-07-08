@@ -357,14 +357,6 @@ export default function Flashcard() {
           </div>
         )}
 
-        {/* Humor feedback */}
-        {humorMsg && (
-          <div className="flex items-center justify-center gap-2 mb-4 animate-[fade-down_0.3s_ease-out]">
-            {humorEmoji && <span className="text-xl animate-[scale-in_0.3s_cubic-bezier(0.34,1.56,0.64,1)]">{humorEmoji}</span>}
-            <span className="text-sm text-primary-500 font-medium italic">{humorMsg}</span>
-          </div>
-        )}
-
         {/* Action buttons */}
         <div className="flex gap-3 sm:gap-4">
           <button
@@ -391,6 +383,14 @@ export default function Flashcard() {
           按 <kbd className="px-1.5 py-0.5 bg-surface-100 rounded text-surface-400 font-mono text-[11px] border border-surface-200">←</kbd> 不认识 ·
           按 <kbd className="px-1.5 py-0.5 bg-surface-100 rounded text-surface-400 font-mono text-[11px] border border-surface-200">→</kbd> 认识
         </p>
+
+        {/* Humor feedback */}
+        {humorMsg && (
+          <div className="flex items-center justify-center gap-2 mt-4 animate-[fade-down_0.3s_ease-out]">
+            {humorEmoji && <span className="text-xl animate-[scale-in_0.3s_cubic-bezier(0.34,1.56,0.64,1)]">{humorEmoji}</span>}
+            <span className="text-sm text-primary-500 font-medium italic">{humorMsg}</span>
+          </div>
+        )}
       </div>
       <EasterEgg show={showEgg} onClose={() => setShowEgg(false)} />
     </div>

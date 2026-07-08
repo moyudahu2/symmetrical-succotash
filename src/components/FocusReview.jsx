@@ -275,14 +275,6 @@ export default function FocusReview() {
             </div>
           </div>
 
-          {/* Humor feedback */}
-          {humorMsg && (
-            <div className="flex items-center justify-center gap-2 mb-4 animate-[fade-down_0.3s_ease-out]">
-              {humorEmoji && <span className="text-xl animate-[scale-in_0.3s_cubic-bezier(0.34,1.56,0.64,1)]">{humorEmoji}</span>}
-              <span className="text-sm text-primary-500 font-medium italic">{humorMsg}</span>
-            </div>
-          )}
-
           {/* Buttons */}
           <div className="flex gap-3 sm:gap-4">
             <button
@@ -303,6 +295,14 @@ export default function FocusReview() {
               <span className="hidden xs:inline">认识</span>
             </button>
           </div>
+
+          {/* Humor feedback */}
+          {humorMsg && (
+            <div className="flex items-center justify-center gap-2 mt-4 animate-[fade-down_0.3s_ease-out]">
+              {humorEmoji && <span className="text-xl animate-[scale-in_0.3s_cubic-bezier(0.34,1.56,0.64,1)]">{humorEmoji}</span>}
+              <span className="text-sm text-primary-500 font-medium italic">{humorMsg}</span>
+            </div>
+          )}
         </div>
       </div>
     )
