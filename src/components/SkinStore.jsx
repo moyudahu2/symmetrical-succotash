@@ -7,7 +7,7 @@ import { useFish } from '../utils/FishContext'
 import BackButton from './BackButton'
 
 export default function SkinStore() {
-  const { unlocked, equipped, purchase, equip, confirmSkin, setConfirmSkin } = useSkin()
+  const { unlocked, equipped, purchaseAndEquip, equip, confirmSkin, setConfirmSkin } = useSkin()
   const { count } = useFish()
 
   function handleAction(skin) {
@@ -171,7 +171,7 @@ export default function SkinStore() {
                   <motion.button
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
-                    onClick={() => { purchase(skin.id); equip(skin.id) }}
+                    onClick={() => purchaseAndEquip(skin.id)}
                     className="flex-1 px-4 py-3 text-white rounded-xl font-medium shadow-soft btn-press"
                     style={{ background: skin.colors.primary }}
                   >

@@ -28,7 +28,7 @@ export function SkinProvider({ children }) {
     if (skin) applyTheme(skin.colors)
   }, [equipped])
 
-  const purchase = useCallback((skinId) => {
+  const purchaseAndEquip = useCallback((skinId) => {
     const skin = SKINS.find(s => s.id === skinId)
     if (!skin || unlocked.includes(skinId)) return false
     if (count < skin.cost) return false
@@ -36,6 +36,9 @@ export function SkinProvider({ children }) {
     const next = [...unlocked, skinId]
     setUnlocked(next)
     saveUnlocked(next)
+    setEquipped(skinId)
+    saveEquipped(skinId)
+    applyTheme(skin.colors)
     setConfirmSkin(null)
     return true
   }, [count, unlocked, addFish])
@@ -47,7 +50,7 @@ export function SkinProvider({ children }) {
   }, [unlocked])
 
   return (
-    <SkinContext.Provider value={{ unlocked, equipped, purchase, equip, confirmSkin, setConfirmSkin }}>
+    <SkinContext.Provider value={{ unlocked, equipped, purchaseAndEquip, equip, confirmSkin, setConfirmSkin }}>
       {children}
     </SkinContext.Provider>
   )
