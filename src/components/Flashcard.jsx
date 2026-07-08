@@ -136,6 +136,23 @@ export default function Flashcard() {
 
   const { speaking, autoplayBlocked, toggle: speakWord, speak, preload } = useTTS()
 
+  const handleRef = useRef(handleResponse)
+  handleRef.current = handleResponse
+
+  const animatingRef = useRef(animating)
+  animatingRef.current = animating
+
+  useEffect(() => {
+    function onKeyDown(e) {
+      if (animatingRef.current) return
+      if (!currentWord) return
+      if (e.key === 'ArrowLeft') { e.preventDefault(); handleRef.current(false) }
+      if (e.key === 'ArrowRight') { e.preventDefault(); handleRef.current(true) }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [currentWord])
+
   useEffect(() => {
     if (currentWord) {
       speak(currentWord.word, { isAutoplay: true })
