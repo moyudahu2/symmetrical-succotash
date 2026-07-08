@@ -250,7 +250,7 @@ export default function Quiz() {
               <BarChart3 className="w-3.5 h-3.5 text-surface-300" />
               <span className="text-sm font-medium text-green-500">{score.correct}</span>
               <span className="text-surface-300 text-sm">/</span>
-              <span className="text-sm text-surface-400">{score.total}</span>
+              <span className="text-sm text-surface-400">{questions.length}</span>
             </div>
           </div>
           <div className="w-full bg-surface-100 rounded-full h-1.5 overflow-hidden">
