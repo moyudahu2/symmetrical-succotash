@@ -15,11 +15,12 @@ export default function WordImage({ word, className = '' }) {
   const [imgError, setImgError] = useState(false)
   const tier = getWordImageTier(word)
 
-  // Tier 4 (FUNCTION): hide entirely
   if (tier === TIER.FUNCTION) return null
 
-  // Tier 0 (HIGH_FREQ) & Tier 1 (CONCRETE): Unsplash image
-  if ((tier === TIER.HIGH_FREQ || tier === TIER.CONCRETE) && !imgError) {
+  const imgLoaded = !imgError
+
+  // Tier 0 (HIGH_FREQ) & Tier 1 (CONCRETE): Picsum.photos photo
+  if ((tier === TIER.HIGH_FREQ || tier === TIER.CONCRETE) && imgLoaded) {
     return (
       <div className={`relative rounded-xl overflow-hidden ${className}`} style={{ aspectRatio: '4/3' }}>
         <img
@@ -33,8 +34,8 @@ export default function WordImage({ word, className = '' }) {
     )
   }
 
-  // Tier 2 (ABSTRACT): Pollinations.ai generated image
-  if (tier === TIER.ABSTRACT && !imgError) {
+  // Tier 2 (ABSTRACT): Pollinations.ai generated illustration
+  if (tier === TIER.ABSTRACT && imgLoaded) {
     return (
       <div className={`relative rounded-xl overflow-hidden bg-surface-50 ${className}`} style={{ aspectRatio: '4/3' }}>
         <img
@@ -48,7 +49,7 @@ export default function WordImage({ word, className = '' }) {
     )
   }
 
-  // Tier 3 (VERB_ADJ) + fallback for any tier whose image failed: gradient + icon
+  // Tier 3 (VERB_ADJ) + fallback for any image load failure: gradient + icon
   const [gradient, textColor] = getGradientColors(word)
   const IconComp = ICON_MAP[getIconName(word)] || HelpCircle
 

@@ -299,11 +299,11 @@ export function getWordImageTier(word) {
   return TIER.VERB_ADJ
 }
 
-// ─── Unsplash URL (concrete nouns) ───
+// ─── Picsum.photos URL (concrete nouns) ───
+// Uses seed for deterministic images; free, no API key, real photographs
 export function getUnsplashUrl(word) {
   const base = word.word.toLowerCase()
-  const query = SYNONYM_MAP[base] || base
-  return `https://source.unsplash.com/featured/400x300/?${encodeURIComponent(query)}`
+  return `https://picsum.photos/seed/${encodeURIComponent(base)}/400/300`
 }
 
 // ─── Pollinations.ai URL (abstract nouns) ───
