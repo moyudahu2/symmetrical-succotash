@@ -204,15 +204,22 @@ export default function Flashcard() {
               </div>
             </div>
           </div>
-          {!planAdjusted && (
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={() => navigate('/study')}
+              className="inline-flex items-center justify-center gap-2 w-full px-6 py-4 bg-white border-2 border-primary-200 text-primary-600 rounded-xl hover:bg-primary-50 hover:border-primary-300 btn-press font-medium transition-all duration-200"
+            >
+              <span>继续学习</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
             <button
               onClick={() => navigate('/study/quiz')}
               className="inline-flex items-center justify-center gap-2 w-full px-6 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl hover:from-primary-600 hover:to-primary-700 btn-press font-medium shadow-lg shadow-primary-200 transition-all duration-200"
             >
-              <span>去测验</span>
+              <span>去检验</span>
               <ArrowRight className="w-4 h-4" />
             </button>
-          )}
+          </div>
         </div>
       </div>
     )
