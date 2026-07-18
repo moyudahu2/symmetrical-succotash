@@ -89,7 +89,12 @@ export default function Flashcard() {
   }, [currentWord?.id])
 
   const handleResponse = useCallback((isKnown) => {
-    if (!currentWord || animating) return
+    if (!currentWord || animating) {
+      if (!currentWord) console.warn('[Flashcard] handleResponse: no currentWord')
+      if (animating) console.warn('[Flashcard] handleResponse: animating, skipped')
+      return
+    }
+    console.log(`[Flashcard] handleResponse word="${currentWord.word}" isKnown=${isKnown} currentIndex=${currentIndex}/${dueWords.length - 1}`)
     setAnimating(true)
     setFlash(isKnown ? 'known' : 'unknown')
     setFeedbackClass(isKnown ? 'bounce-correct' : 'shake-wrong')
@@ -98,8 +103,6 @@ export default function Flashcard() {
       const nextConsec = consecCorrect + 1
       setConsecCorrect(nextConsec)
       if (nextConsec % 5 === 0) addFish(5, '摸鱼大师')
-      // Easter egg: check consecutive correct threshold
-      // Easter egg: random consecutive correct trigger (low probability)
       if (nextConsec % EASTER_EGG_CONFIG.consecCorrectThreshold === 0 && Math.random() < EASTER_EGG_CONFIG.triggerProbability && isEggCooldownElapsed()) {
         markEggShown()
         setShowEgg(true)
@@ -109,7 +112,6 @@ export default function Flashcard() {
       setConsecCorrect(0)
     }
 
-    // Easter egg: check time threshold (low probability)
     const elapsed = Date.now() - lastTimeCheck.current
     if (elapsed >= EASTER_EGG_CONFIG.timeThresholdMinutes * 60000) {
       lastTimeCheck.current = Date.now()
@@ -121,11 +123,16 @@ export default function Flashcard() {
 
     const prevProgress = getWordProgress(currentWord.id)
 
-    // Schedule advancement — must always run to prevent stuck UI
+    // Schedule SRS save + advancement — must always run to prevent stuck UI
     requestAnimationFrame(() => {
-      const newSrs = calculateSrs(prevProgress, isKnown)
-      saveWordProgress(currentWord.id, newSrs)
-      markWordStudied(currentWord.id, prevProgress)
+      try {
+        const newSrs = calculateSrs(prevProgress, isKnown)
+        saveWordProgress(currentWord.id, newSrs)
+        markWordStudied(currentWord.id, prevProgress)
+        console.log(`[Flashcard] SRS saved for "${currentWord.word}"`)
+      } catch (err) {
+        console.error('[Flashcard] SRS save failed:', err)
+      }
 
       // Non-critical: milestone egg
       try {
@@ -142,8 +149,11 @@ export default function Flashcard() {
         setFeedbackClass('')
         setFlipped(false)
         if (currentIndex < dueWords.length - 1) {
+          const next = currentIndex + 1
+          console.log(`[Flashcard] Current Index updated to: ${next}`)
           setCurrentIndex(i => i + 1)
         } else {
+          console.log('[Flashcard] All words done, showing finish screen')
           setIsDone(true)
         }
         setAnimating(false)
