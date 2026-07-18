@@ -103,7 +103,7 @@ export default function HubPage() {
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-400 via-primary-500 to-primary-600 flex items-center justify-center shadow-soft">
             <Sparkles className="w-[18px] h-[18px] text-white" />
           </div>
-          <span className="text-sm font-bold text-surface-800 font-display tracking-tight">幺家学英语</span>
+          <span className="text-sm font-bold text-surface-800 font-display tracking-tight">咸鱼学英语</span>
         </div>
         <div className="flex items-center gap-2">
           <button

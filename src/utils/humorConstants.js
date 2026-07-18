@@ -11,6 +11,9 @@ export const LOADING = [
   '量子波动速读引擎启动中...',
   '把单词从角落里薅出来...',
   '脑细胞正在热身...',
+  '咸鱼正在翻面中...',
+  '摸鱼模式加载中...',
+  '鱼塘管理员正在赶来...',
 ]
 
 export const CORRECT = [
@@ -26,6 +29,10 @@ export const CORRECT = [
   '目测你已经超过 90% 的考生了',
   '你的词汇量又膨胀了一圈',
   '这个单词已经被你驯服了',
+  '这条咸鱼今天不咸了！',
+  '摸鱼摸出了学术水平！',
+  '今天的鱼塘你说了算！',
+  '咸鱼翻身第一式：答对了！',
 ]
 
 export const WRONG = [
@@ -41,6 +48,9 @@ export const WRONG = [
   '距离学神还有 100 个单词的距离',
   '这题属于"以后一定会考"的那种',
   '没事，CET-4 又不是只有这一道题',
+  '这条咸鱼今天有点咸...',
+  '摸鱼失败，被单词逮住了！',
+  '鱼塘管理员表示：再练练吧',
 ]
 
 export const DONE = [
@@ -50,17 +60,19 @@ export const DONE = [
   '四级通过率又上升了 0.01%',
   '大脑已满载，请勿继续输入',
   '恭喜你，又离四级证书近了一步',
-  '幺家科技认证：今天是努力的一天',
+  '咸鱼科技认证：今天是摸鱼的一天',
   '任务完成！你的脑细胞申请了加班费',
   '学海无涯，但你今天已经游了很远',
   '很棒！你的努力我们看在眼里——虽然单词也是',
+  '今日摸鱼任务达标，咸鱼可以翻面了！',
+  '鱼塘今日投喂完毕，明天继续！',
 ]
 
 export const LOADING_WORDS = '单词正在赶来...'
 
-export const EMOJI_CORRECT = ['🎉', '🌟', '💪', '🎊', '✨', '🏆', '👑', '🚀', '🔥', '💯', '⭐', '🥇']
+export const EMOJI_CORRECT = ['🎉', '🌟', '💪', '🎊', '✨', '🏆', '👑', '🚀', '🔥', '💯', '⭐', '🥇', '🐟', '🐠', '🎣']
 
-export const EMOJI_WRONG = ['😅', '🤔', '💭', '😵', '🫠', '🤷', '💀', '😬', '🙃', '🥴']
+export const EMOJI_WRONG = ['😅', '🤔', '💭', '😵', '🫠', '🤷', '💀', '😬', '🙃', '🥴', '🐡', '🦐']
 
 export const PROGRESS_PHRASES = [
   '摸鱼进度',
@@ -93,6 +105,11 @@ export const EASTER_EGGS = [
   { emoji: '🎠', text: '有些单词长得很像，比如 "dessert"（甜点）和 "desert"（沙漠）。记住：甜点有两个 s，因为你想吃两份。', type: 'cold' },
   { emoji: '🦥', text: '树懒的速度大概是每秒 0.03 米。而你背一个单词的速度...算了，不提了。', type: 'humor' },
   { emoji: '🎁', text: '恭喜你触发隐藏彩蛋！奖励你一个知识点：这篇文案本身就是知识点。', type: 'humor' },
+  { emoji: '🐠', text: '咸鱼的记忆只有 7 秒，所以每 7 秒你都会重新爱上背单词（大概吧）', type: 'cold' },
+  { emoji: '🦈', text: '咸鱼界也有卷王——鲨鱼。但你已经是一条有梦想的咸鱼了！', type: 'encourage' },
+  { emoji: '🎣', text: '单词就像鱼钩上的饵，你每次看它都忍不住咬一口。', type: 'humor' },
+  { emoji: '🧂', text: '咸鱼为什么咸？因为你流下的汗水腌制的——别哭，背单词而已。', type: 'humor' },
+  { emoji: '🛌', text: '咸鱼的人生哲学：能躺着背，绝不坐着学。你悟了吗？', type: 'encourage' },
 ]
 
 export const EASTER_EGG_CONFIG = {
@@ -103,8 +120,8 @@ export const EASTER_EGG_CONFIG = {
 
 // ─── Milestone eggs (one-time guaranteed) ───
 const MILESTONE_EGGS = {
-  first100: { emoji: '🏅', text: '词汇量突破 100！你已经完成了四级词汇的 1/45，剩下的 44/45 才是真正考验意志力的部分。', type: 'milestone' },
-  day3:     { emoji: '🔥', text: '连续打卡 3 天！你的毅力和你刷短视频的时长形成了鲜明对比。继续保持！', type: 'milestone' },
+  first100: { emoji: '🏅', text: '100 词成就达成！这条咸鱼已经学会翻面了——还有 44/45 的路要走，继续摸鱼吧！', type: 'milestone' },
+  day3:     { emoji: '🔥', text: '连续打卡 3 天！你已经连续摸了 3 天的鱼，鱼塘管理员表示非常满意。继续保持！', type: 'milestone' },
 }
 
 const MILESTONE_KEY = 'egg_milestones_done'

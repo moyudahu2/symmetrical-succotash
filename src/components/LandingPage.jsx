@@ -29,7 +29,7 @@ const TIMELINE = [
   {
     date: '2024.03',
     title: '确立核心算法',
-    desc: '确立了"能躺着绝不坐着"的核心算法。这是幺家科技历史上第一个、也是唯一一个全票通过的决议。',
+    desc: '确立了"能躺着绝不坐着"的核心算法。这是咸鱼科技历史上第一个、也是唯一一个全票通过的决议。',
     icon: Fish,
     color: 'text-sky-500',
     bg: 'bg-sky-50',
@@ -37,8 +37,8 @@ const TIMELINE = [
   },
   {
     date: '2024.06',
-    title: '幺家英语 v1.0 上线',
-    desc: '幺家英语 v1.0 正式上线，成功修复了"太努力"的 Bug。我们终于可以让用户躺着背单词了。',
+    title: '咸鱼英语 v1.0 上线',
+    desc: '咸鱼英语 v1.0 正式上线，成功修复了"太努力"的 Bug。我们终于可以让用户躺着背单词了。',
     icon: Rocket,
     color: 'text-primary-500',
     bg: 'bg-primary-50',
@@ -139,7 +139,7 @@ export default function LandingPage() {
               <Sparkles className="w-[18px] h-[18px] text-white" />
             </div>
             <span className="text-sm font-bold text-surface-800 font-display tracking-tight truncate">
-              幺家科技<span className="text-surface-400 mx-1.5">|</span>英语事业部
+              咸鱼科技<span className="text-surface-400 mx-1.5">|</span>英语事业部
             </span>
           </div>
 
@@ -239,7 +239,7 @@ export default function LandingPage() {
           >
             重新定义四级备考
             <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-accent-500">
-              —— 幺家科技
+              —— 咸鱼科技
             </span>
           </motion.h1>
 
@@ -322,7 +322,7 @@ export default function LandingPage() {
               </h2>
               <div className="space-y-4 text-surface-500 leading-relaxed">
                 <p>
-                  幺家科技成立于 2024 年卧室分舵，致力于通过
+                  咸鱼科技成立于 2024 年卧室分舵，致力于通过
                   <span className="text-primary-500 font-medium">「量子波动速读」</span>
                   与
                   <span className="text-primary-500 font-medium">「咸鱼心态」</span>
@@ -333,7 +333,7 @@ export default function LandingPage() {
                   我们坚信，真正的学习不是强迫，而是让单词自己觉得不被需要了，主动钻进你的脑子里。
                 </p>
                 <p className="text-surface-400 text-sm italic">
-                  "我们的用户反馈显示，使用幺家科技后，他们的睡眠质量提升了 300%——虽然四级通过率并没有变化。"
+                  "我们的用户反馈显示，使用咸鱼科技后，他们的睡眠质量提升了 300%——虽然四级通过率并没有变化。"
                 </p>
               </div>
             </div>
@@ -346,12 +346,12 @@ export default function LandingPage() {
               <div className="relative bg-white rounded-2xl border border-surface-100 overflow-hidden shadow-soft">
                 <img
                   src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&q=80"
-                  alt="幺家科技卧室分舵办公场景"
+                  alt="咸鱼科技卧室分舵办公场景"
                   className="w-full h-56 sm:h-64 object-cover"
                   loading="lazy"
                 />
                 <div className="p-5 sm:p-6">
-                  <h3 className="font-bold text-surface-800 text-lg mb-1">幺家科技 · 卧室分舵</h3>
+                  <h3 className="font-bold text-surface-800 text-lg mb-1">咸鱼科技 · 卧室分舵</h3>
                   <p className="text-surface-400 text-sm mb-3">成立于 2024 年，总部位于创始人卧室的床头柜上</p>
                   <div className="flex items-center gap-2 text-xs text-surface-400">
                     <span className="w-2 h-2 rounded-full bg-green-400 inline-block" />
@@ -376,7 +376,7 @@ export default function LandingPage() {
               摸鱼<span className="text-accent-500">编年史</span>
             </h2>
             <p className="text-surface-400 max-w-lg mx-auto">
-              从躺平到躺赢，我们只用了半年时间。以下是幺家科技的历史性时刻。
+              从躺平到躺赢，我们只用了半年时间。以下是咸鱼科技的历史性时刻。
             </p>
           </div>
         </Reveal>
@@ -500,10 +500,10 @@ export default function LandingPage() {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
               <Sparkles className="w-4 h-4 text-white" />
             </div>
-            <span className="text-sm font-bold text-surface-600 font-display">幺家科技 · 英语事业部</span>
+            <span className="text-sm font-bold text-surface-600 font-display">咸鱼科技 · 英语事业部</span>
           </div>
           <div className="flex items-center gap-3 text-xs text-surface-400 flex-wrap justify-center">
-            <span>© 2026 幺家科技 (Yaojia Tech). All rights reserved.</span>
+            <span>© 2026 咸鱼科技 (Yaojia Tech). All rights reserved.</span>
             <span className="hidden sm:inline text-surface-200">|</span>
             <span className="italic">其实并没有版权</span>
           </div>

@@ -33,7 +33,7 @@ export default function HeroSection({ onEnter }) {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center shadow-soft">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
-            <span className="text-lg font-bold text-surface-800 font-display tracking-tight">幺家学英语</span>
+            <span className="text-lg font-bold text-surface-800 font-display tracking-tight">咸鱼学英语</span>
           </div>
         </div>
       </nav>

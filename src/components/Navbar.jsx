@@ -19,7 +19,7 @@ export default function Navbar({ activeTab, onTabChange, onHome }) {
           >
             <Sparkles className="w-[18px] h-[18px] text-white" />
           </button>
-          <span className="font-bold text-surface-800 text-sm sm:text-base hidden xs:inline font-display tracking-tight">幺家学英语</span>
+          <span className="font-bold text-surface-800 text-sm sm:text-base hidden xs:inline font-display tracking-tight">咸鱼学英语</span>
         </div>
         <div className="flex gap-0.5 sm:gap-1">
           {tabs.map(tab => {
