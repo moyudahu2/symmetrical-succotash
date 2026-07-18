@@ -96,8 +96,7 @@ export default function Quiz() {
 
     if (isCorrect) {
       setTimeout(() => playSuccess(), 80)
-      setHumorMsg(pick(CORRECT))
-      setHumorEmoji(pick(EMOJI_CORRECT))
+      if (Math.random() < 0.3) { setHumorMsg(pick(CORRECT)); setHumorEmoji(pick(EMOJI_CORRECT)) }
       setTimeout(() => { setHumorMsg(null); setHumorEmoji(null) }, 2000)
       const nextConsec = consecCorrect + 1
       setConsecCorrect(nextConsec)
@@ -121,8 +120,7 @@ export default function Quiz() {
       }, 900)
     } else {
       setTimeout(() => playFail(), 80)
-      setHumorMsg(pick(WRONG))
-      setHumorEmoji(pick(EMOJI_WRONG))
+      if (Math.random() < 0.3) { setHumorMsg(pick(WRONG)); setHumorEmoji(pick(EMOJI_WRONG)) }
       setTimeout(() => { setHumorMsg(null); setHumorEmoji(null) }, 2500)
       setConsecCorrect(0)
     }

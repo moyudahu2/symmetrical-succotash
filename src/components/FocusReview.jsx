@@ -111,8 +111,8 @@ export default function FocusReview() {
     setAnimating(true)
     setFlash(isKnown ? 'known' : 'unknown')
     setFeedbackClass(isKnown ? 'bounce-correct' : 'shake-wrong')
-    if (isKnown) { playSuccess(); setHumorMsg(pick(CORRECT)); setHumorEmoji(pick(EMOJI_CORRECT)) }
-    else { playFail(); setHumorMsg(pick(WRONG)); setHumorEmoji(pick(EMOJI_WRONG)) }
+    if (isKnown) { playSuccess(); if (Math.random() < 0.3) { setHumorMsg(pick(CORRECT)); setHumorEmoji(pick(EMOJI_CORRECT)) } }
+    else { playFail(); if (Math.random() < 0.3) { setHumorMsg(pick(WRONG)); setHumorEmoji(pick(EMOJI_WRONG)) } }
     setTimeout(() => { setHumorMsg(null); setHumorEmoji(null) }, 2000)
 
     const prevProgress = getWordProgress(currentWord.id)

@@ -99,7 +99,7 @@ export default function Flashcard() {
     setFlash(isKnown ? 'known' : 'unknown')
     setFeedbackClass(isKnown ? 'bounce-correct' : 'shake-wrong')
     if (isKnown) {
-      playSuccess(); setHumorMsg(pick(CORRECT)); setHumorEmoji(pick(EMOJI_CORRECT)); setConfetti(true); setTimeout(() => setConfetti(false), 1200)
+      playSuccess(); if (Math.random() < 0.3) { setHumorMsg(pick(CORRECT)); setHumorEmoji(pick(EMOJI_CORRECT)) }; setConfetti(true); setTimeout(() => setConfetti(false), 1200)
       const nextConsec = consecCorrect + 1
       setConsecCorrect(nextConsec)
       if (nextConsec % 5 === 0) addFish(5, '摸鱼大师')
@@ -108,7 +108,7 @@ export default function Flashcard() {
         setShowEgg(true)
       }
     } else {
-      playFail(); setHumorMsg(pick(WRONG)); setHumorEmoji(pick(EMOJI_WRONG))
+      playFail(); if (Math.random() < 0.3) { setHumorMsg(pick(WRONG)); setHumorEmoji(pick(EMOJI_WRONG)) }
       setConsecCorrect(0)
     }
 
